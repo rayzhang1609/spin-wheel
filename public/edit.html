@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wheel Manager</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/edit.css">
+</head>
+<body class="edit-body">
+  <div class="edit-container">
+    <header class="edit-header">
+      <div class="edit-brand">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2v20"/><path d="M2 12h20"/></svg>
+        <h1 class="edit-title">Wheel Manager</h1>
+      </div>
+      <nav class="edit-nav">
+        <a href="/spin" class="nav-link">Spin</a>
+        <a href="/knockout" class="nav-link">Knockout</a>
+      </nav>
+    </header>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-key="spin" type="button">Spin Wheel</button>
+      <button class="tab-btn" data-key="knockout" type="button">Knockout Wheel</button>
+      <span class="tab-spacer"></span>
+      <span class="sync-indicator"><span class="sync-dot"></span> Live</span>
+    </div>
+
+    <div class="edit-layout">
+      <section class="edit-preview">
+        <h2 class="section-label">Preview · <span id="activeName">Spin Wheel</span></h2>
+        <div class="preview-wheel-area">
+          <canvas id="wheelCanvas" width="360" height="360"></canvas>
+        </div>
+        <p class="item-count" id="itemCount">0 items</p>
+      </section>
+
+      <section class="edit-panel">
+        <div class="panel-block">
+          <h2 class="section-label">Items</h2>
+          <div class="editor-items" id="editorItems"></div>
+        </div>
+
+        <div class="panel-block">
+          <h2 class="section-label">Add Item</h2>
+          <div class="add-row">
+            <input type="text" id="newLabel" placeholder="Label" class="editor-input" maxlength="40">
+            <input type="color" id="newColor" value="#3b82f6" class="editor-color" title="Color">
+            <input type="text" id="newEmoji" placeholder="Icon" class="editor-input small" maxlength="4">
+            <button class="btn btn-primary" id="addItemBtn" type="button">+ Add</button>
+          </div>
+        </div>
+
+        <div class="panel-block">
+          <h2 class="section-label">Spin Settings</h2>
+          <div class="settings-row">
+            <label>
+              <span>Duration (ms)</span>
+              <input type="number" id="spinDuration" value="5000" min="1000" max="15000" step="500" class="editor-input num-input">
+            </label>
+            <label>
+              <span>Min Spins</span>
+              <input type="number" id="minSpins" value="5" min="1" max="20" class="editor-input num-input">
+            </label>
+            <label>
+              <span>Max Spins</span>
+              <input type="number" id="maxSpins" value="10" min="2" max="30" class="editor-input num-input">
+            </label>
+          </div>
+          <button class="btn btn-secondary" id="saveSettingsBtn" type="button">Save Settings</button>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabaseClient.js"></script>
+  <script src="js/wheel.js"></script>
+  <script src="js/edit.js"></script>
+</body>
+</html>

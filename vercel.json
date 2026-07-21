@@ -1,0 +1,7 @@
+{
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/", "destination": "/spin.html" },
+    { "source": "/manager", "destination": "/edit.html" }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "name": "spin-wheel",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Spin wheel app — static frontend + Vercel serverless + Supabase",
+  "scripts": {
+    "dev": "vercel dev",
+    "start": "node backend/server.js"
+  }
+}

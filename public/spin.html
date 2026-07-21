@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spin the Wheel!</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/game.css">
+</head>
+<body>
+  <div class="stars" id="stars"></div>
+  <div class="shooting-stars" id="shootingStars"></div>
+
+  <div class="container">
+    <div class="event-banner">
+      <span>&#x2B50; Daily Reward</span>
+      <span class="event-banner-chip">&#x1F504; Live</span>
+    </div>
+
+    <h1 class="title">
+      <span class="title-spin">SPIN</span>
+      <span class="title-the">THE</span>
+      <span class="title-wheel">WHEEL!</span>
+    </h1>
+
+    <div class="wheel-area">
+      <div class="game-badge badge-coins">
+        <span class="badge-icon">&#x1FA99;</span>
+        <span class="badge-num" id="coinCount">0</span>
+      </div>
+      <div class="game-badge badge-gems">
+        <span class="badge-icon">&#x1F48E;</span>
+        <span class="badge-num" id="gemCount">0</span>
+      </div>
+
+      <div class="mascot mascot-side mascot-side-left" id="mascotLeft">
+        <div class="mascot-body">&#x1F98A;</div>
+        <div class="mascot-speech" id="speechLeft">Spin the wheel!</div>
+      </div>
+      <div class="mascot mascot-side mascot-side-right" id="mascotRight">
+        <div class="mascot-body">&#x1F430;</div>
+        <div class="mascot-speech" id="speechRight">Good luck!</div>
+      </div>
+
+      <div class="pointer-container">
+        <div class="pointer" id="pointer"></div>
+      </div>
+      <div class="wheel-glow" id="wheelGlow"></div>
+      <canvas id="wheelCanvas" width="500" height="500"></canvas>
+      <button class="spin-btn" id="spinBtn">
+        <span class="spin-btn-text">SPIN!</span>
+      </button>
+    </div>
+
+    <div class="result-banner hidden" id="resultBanner">
+      <div class="result-content">
+        <span class="result-emoji" id="resultEmoji"></span>
+        <span class="result-text" id="resultText"></span>
+      </div>
+      <button class="result-close" id="resultClose">&times;</button>
+    </div>
+
+    <div class="controls">
+      <button class="ctrl-btn reset-btn" id="resetBtn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+        Reset
+      </button>
+    </div>
+
+    <div class="sync-indicator" id="syncIndicator">
+      <span class="sync-dot"></span> Live
+    </div>
+  </div>
+
+  <canvas id="confettiCanvas"></canvas>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabaseClient.js"></script>
+  <script src="js/wheel.js"></script>
+  <script src="js/spin.js"></script>
+</body>
+</html>

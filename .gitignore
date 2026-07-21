@@ -1,0 +1,24 @@
+# dependencies
+node_modules/
+
+# vercel local
+.vercel/
+
+# env (never commit secrets)
+.env
+.env.local
+.env.*.local
+
+# logs
+*.log
+npm-debug.log*
+
+# local dev data (Supabase is the source of truth now)
+backend/data/*.json
+
+# legacy local-only frontend (deployed copy lives in /public)
+frontend/
+
+# OS
+.DS_Store
+Thumbs.db
