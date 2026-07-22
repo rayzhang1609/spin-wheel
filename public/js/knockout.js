@@ -272,6 +272,10 @@ resultClose.addEventListener('click', () => {
   resultBanner.classList.add('hidden');
 });
 
+resultBanner.addEventListener('click', (e) => {
+  if (e.target === resultBanner) resultBanner.classList.add('hidden');
+});
+
 resetBtn.addEventListener('click', () => {
   if (wheel.isSpinning) return;
   resetGame();

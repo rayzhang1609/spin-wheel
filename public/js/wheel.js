@@ -64,9 +64,9 @@ class SpinWheel {
 
     ctx.save();
     ctx.translate(cx, cy);
-    ctx.shadowColor = 'rgba(0,0,0,0.55)';
-    ctx.shadowBlur = 26;
-    ctx.shadowOffsetY = 14;
+    ctx.shadowColor = 'rgba(0,0,0,0.6)';
+    ctx.shadowBlur = 32;
+    ctx.shadowOffsetY = 18;
     ctx.fillStyle = '#8E5E12';
     ctx.beginPath();
     ctx.arc(0, 0, r, 0, Math.PI * 2);
@@ -122,9 +122,9 @@ class SpinWheel {
         ctx.shadowColor = 'rgba(255,255,255,' + winGlow + ')';
         ctx.shadowBlur = 28;
       } else {
-        ctx.shadowColor = 'rgba(0,0,0,0.35)';
-        ctx.shadowBlur = 6;
-        ctx.shadowOffsetY = 3;
+        ctx.shadowColor = 'rgba(0,0,0,0.45)';
+        ctx.shadowBlur = 8;
+        ctx.shadowOffsetY = 4;
       }
 
       const chipGrad = ctx.createRadialGradient(-chipR * 0.35, -chipR * 0.35, chipR * 0.1, 0, 0, chipR);
@@ -140,6 +140,12 @@ class SpinWheel {
 
       ctx.lineWidth = Math.max(2, chipR * 0.12);
       ctx.strokeStyle = this.toRgba(item.color, 0.85);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(0, 0, chipR - chipR * 0.1, 0, Math.PI * 2);
+      ctx.lineWidth = Math.max(1, chipR * 0.06);
+      ctx.strokeStyle = 'rgba(255,255,255,0.55)';
       ctx.stroke();
 
       if (item.emoji) {
@@ -169,24 +175,24 @@ class SpinWheel {
     ctx.beginPath();
     ctx.arc(0, 0, wedgeR + rimThickness * 0.5, 0, Math.PI * 2);
     ctx.lineWidth = rimThickness;
-    const rimGrad = ctx.createLinearGradient(-r, -r, r, r);
-    rimGrad.addColorStop(0, '#FFE27A');
-    rimGrad.addColorStop(0.45, '#E0A93A');
-    rimGrad.addColorStop(0.75, '#C98A1E');
-    rimGrad.addColorStop(1, '#8E5E12');
+    const rimGrad = ctx.createRadialGradient(0, 0, wedgeR, 0, 0, r);
+    rimGrad.addColorStop(0, '#8E5E12');
+    rimGrad.addColorStop(0.3, '#C98A1E');
+    rimGrad.addColorStop(0.65, '#E0A93A');
+    rimGrad.addColorStop(1, '#FFE27A');
     ctx.strokeStyle = rimGrad;
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(0, 0, r - 1, 0, Math.PI * 2);
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = 'rgba(255,255,255,0.5)';
     ctx.stroke();
 
     ctx.beginPath();
     ctx.arc(0, 0, wedgeR, 0, Math.PI * 2);
     ctx.lineWidth = 2;
-    ctx.strokeStyle = 'rgba(0,0,0,0.35)';
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.arc(0, 0, wedgeR + rimThickness - 1.5, 0, Math.PI * 2);
-    ctx.lineWidth = 1.5;
-    ctx.strokeStyle = 'rgba(255,255,255,0.4)';
+    ctx.strokeStyle = 'rgba(0,0,0,0.4)';
     ctx.stroke();
 
     for (let i = 0; i < n; i++) {
@@ -242,19 +248,26 @@ class SpinWheel {
 
   drawHub(ctx, hubR, faceR, now) {
     ctx.save();
-    ctx.shadowColor = 'rgba(0,0,0,0.5)';
-    ctx.shadowBlur = 14;
-    ctx.shadowOffsetY = 6;
-    const ringGrad = ctx.createLinearGradient(-hubR, -hubR, hubR, hubR);
-    ringGrad.addColorStop(0, '#FFE27A');
-    ringGrad.addColorStop(0.5, '#E0A93A');
-    ringGrad.addColorStop(1, '#8E5E12');
+    ctx.shadowColor = 'rgba(0,0,0,0.6)';
+    ctx.shadowBlur = 20;
+    ctx.shadowOffsetY = 8;
+    const ringGrad = ctx.createRadialGradient(0, 0, faceR, 0, 0, hubR);
+    ringGrad.addColorStop(0, '#8E5E12');
+    ringGrad.addColorStop(0.25, '#C98A1E');
+    ringGrad.addColorStop(0.6, '#E0A93A');
+    ringGrad.addColorStop(1, '#FFE27A');
     ctx.fillStyle = ringGrad;
     ctx.beginPath();
     ctx.arc(0, 0, hubR, 0, Math.PI * 2);
     ctx.fill();
     ctx.shadowBlur = 0;
     ctx.shadowOffsetY = 0;
+
+    ctx.beginPath();
+    ctx.arc(0, 0, hubR - 0.5, 0, Math.PI * 2);
+    ctx.lineWidth = 1.5;
+    ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+    ctx.stroke();
 
     const notchCount = 14;
     const notchR = hubR * 0.93;
@@ -273,9 +286,15 @@ class SpinWheel {
     }
 
     ctx.beginPath();
-    ctx.arc(0, 0, faceR + 2, 0, Math.PI * 2);
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = 'rgba(0,0,0,0.4)';
+    ctx.arc(0, 0, faceR + 3, 0, Math.PI * 2);
+    ctx.lineWidth = 2.5;
+    ctx.strokeStyle = 'rgba(0,0,0,0.5)';
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(0, 0, faceR + 1.5, 0, Math.PI * 2);
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = 'rgba(255,255,255,0.25)';
     ctx.stroke();
 
     const faceGrad = ctx.createRadialGradient(-faceR * 0.35, -faceR * 0.35, faceR * 0.1, 0, 0, faceR);
@@ -289,7 +308,7 @@ class SpinWheel {
     ctx.beginPath();
     ctx.arc(-faceR * 0.25, -faceR * 0.3, faceR * 0.55, 0, Math.PI * 2);
     const gloss = ctx.createRadialGradient(-faceR * 0.25, -faceR * 0.3, 0, -faceR * 0.25, -faceR * 0.3, faceR * 0.55);
-    gloss.addColorStop(0, 'rgba(255,255,255,0.45)');
+    gloss.addColorStop(0, 'rgba(255,255,255,0.5)');
     gloss.addColorStop(1, 'rgba(255,255,255,0)');
     ctx.fillStyle = gloss;
     ctx.fill();

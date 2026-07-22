@@ -9,6 +9,17 @@
   --game-green-dark: #059669;
   --game-gold: #FBBF24;
   --game-gold-dark: #B45309;
+  --hub-shadow-blur: 20px;
+  --hub-shadow-y: 8px;
+  --hub-shadow-color: rgba(0,0,0,0.6);
+  --chip-shadow-blur: 8px;
+  --chip-shadow-y: 4px;
+  --chip-shadow-color: rgba(0,0,0,0.45);
+  --wheel-shadow-blur: 32px;
+  --wheel-shadow-y: 18px;
+  --wheel-shadow-color: rgba(0,0,0,0.6);
+  --badge-icon-glow: 0 0 6px rgba(255,235,150,0.6);
+  --btn-rim-light: rgba(255,255,255,0.35);
 }
 
 /* ===== Wheel area: ensure positioned context for chrome badges ===== */
@@ -139,7 +150,7 @@
   justify-content: center;
   font-size: 0.85rem;
   background: radial-gradient(circle at 35% 35%, #fff, rgba(255,255,255,0.4));
-  box-shadow: inset 0 -1px 2px rgba(0,0,0,0.3);
+  box-shadow: inset 0 -1px 2px rgba(0,0,0,0.3), var(--badge-icon-glow);
   flex-shrink: 0;
 }
 
@@ -164,7 +175,7 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  padding: 8px 26px;
+  padding: 8px 22px;
   margin-bottom: 6px;
   font-family: var(--fun-font), sans-serif;
   font-weight: 700;
@@ -174,35 +185,19 @@
   text-transform: uppercase;
   background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
   border: 2px solid rgba(255,255,255,0.7);
-  border-radius: 6px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.4), inset 0 2px 4px rgba(255,255,255,0.3);
+  border-radius: 4px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.45), inset 0 2px 4px rgba(255,255,255,0.3);
   position: relative;
+  clip-path: polygon(
+    8px 0%, calc(100% - 8px) 0%,
+    100% 50%,
+    calc(100% - 8px) 100%, 8px 100%,
+    0% 50%
+  );
 }
 
 .event-banner.knockout-banner {
   background: linear-gradient(135deg, #ff6b6b, #ee5a24);
-}
-
-.event-banner::before,
-.event-banner::after {
-  content: '';
-  position: absolute;
-  top: 100%;
-  width: 0;
-  height: 0;
-  border: 8px solid transparent;
-}
-
-.event-banner::before {
-  left: -2px;
-  border-top-color: rgba(0,0,0,0.35);
-  border-right-color: transparent;
-}
-
-.event-banner::after {
-  right: -2px;
-  border-top-color: rgba(0,0,0,0.35);
-  border-left-color: transparent;
 }
 
 .event-banner-chip {
@@ -262,7 +257,7 @@
 .knockout-restart {
   background: linear-gradient(180deg, #475569, #1e293b) !important;
   color: #fff !important;
-  border-top-color: rgba(255,255,255,0.3) !important;
+  border-top: 2px solid var(--btn-rim-light) !important;
 }
 
 .reset-btn:hover,
@@ -418,8 +413,11 @@ body {
 .won-popup { padding: 26px; }
 .won-text { font-size: 1.8rem; }
 .won-item { font-size: 1.3rem; }
-.result-banner { padding: 12px 18px; gap: 10px; }
-.result-text { font-size: 1.15rem; }
+.result-banner { gap: 16px; }
+.result-content { padding: 36px 32px; border-radius: 22px; gap: 12px; }
+.result-emoji { font-size: 3.5rem; }
+.result-text { font-size: 1.8rem; }
+.result-close { padding: 12px 32px; font-size: 1rem; }
 
 /* Very small phones: tighten a touch more */
 @media (max-width: 380px) {

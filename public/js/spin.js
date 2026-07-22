@@ -196,6 +196,10 @@ resultClose.addEventListener('click', () => {
   resultBanner.classList.add('hidden');
 });
 
+resultBanner.addEventListener('click', (e) => {
+  if (e.target === resultBanner) resultBanner.classList.add('hidden');
+});
+
 resetBtn.addEventListener('click', async () => {
   if (wheel.isSpinning) return;
   wheel.rotation = 0;
