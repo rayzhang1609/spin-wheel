@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 40" width="200" height="40">
+  <defs>
+    <linearGradient id="cometTrailGrad" x1="0" y1="0.5" x2="1" y2="0.5">
+      <stop offset="0%" stop-color="#4FC3F7" stop-opacity="0"/>
+      <stop offset="40%" stop-color="#4FC3F7" stop-opacity="0.3"/>
+      <stop offset="75%" stop-color="#fff" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#fff" stop-opacity="1"/>
+    </linearGradient>
+    <radialGradient id="cometHeadGrad" cx="40%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#fff"/>
+      <stop offset="50%" stop-color="#4FC3F7"/>
+      <stop offset="100%" stop-color="#1565c0" stop-opacity="0.4"/>
+    </radialGradient>
+    <filter id="cometGlow" x="-50%" y="-100%" width="200%" height="300%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <line x1="10" y1="20" x2="170" y2="20" stroke="url(#cometTrailGrad)" stroke-width="3" stroke-linecap="round" filter="url(#cometGlow)"/>
+  <line x1="30" y1="20" x2="170" y2="20" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" stroke-linecap="round"/>
+  <circle cx="175" cy="20" r="8" fill="url(#cometHeadGrad)" filter="url(#cometGlow)"/>
+  <circle cx="175" cy="20" r="4" fill="#fff" opacity="0.9"/>
+  <circle cx="172" cy="17" r="1.5" fill="#fff"/>
+</svg>

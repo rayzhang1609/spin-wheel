@@ -5,51 +5,63 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Spin the Wheel!</title>
   <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/game.css">
+  <link rel="stylesheet" href="css/arcade-theme.css">
 </head>
 <body>
-  <div class="stars" id="stars"></div>
-  <div class="shooting-stars" id="shootingStars"></div>
+  <div class="bokeh-layer" id="bokehLayer"></div>
+  <div class="vignette"></div>
+
+  <div class="top-bar">
+    <button class="top-icon-btn" aria-label="Profile">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>
+    </button>
+    <div class="top-currency">
+      <span class="currency-coin">&#x1FA99;</span>
+      <span class="currency-num" id="coinCount">0</span>
+    </div>
+    <button class="top-icon-btn" aria-label="Settings">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19 12c0 .5-.05 1-.14 1.47l2.05 1.6-2 3.46-2.42-1.02c-.7.54-1.5.96-2.36 1.22L16 22h-4l-.13-2.27c-.86-.26-1.66-.68-2.36-1.22L7.09 19.53l-2-3.46 2.05-1.6C7.05 13 7 12.5 7 12s.05-1 .14-1.47L5.09 8.93l2-3.46 2.42 1.02c.7-.54 1.5-.96 2.36-1.22L12 2h4l-.13 2.27c.86.26 1.66.68 2.36 1.22l2.42-1.02 2 3.46-2.05 1.6c.09.47.14.97.14 1.47z"/></svg>
+    </button>
+  </div>
 
   <div class="container">
-    <div class="event-banner">
-      <span>&#x2B50; Daily Reward</span>
-      <span class="event-banner-chip">&#x1F504; Live</span>
+    <div class="title-banner">
+      <span>SPIN THE WHEEL!</span>
     </div>
 
-    <h1 class="title">
-      <span class="title-spin">SPIN</span>
-      <span class="title-the">THE</span>
-      <span class="title-wheel">WHEEL!</span>
-    </h1>
-
-    <div class="wheel-area">
-      <div class="game-badge badge-coins">
-        <span class="badge-icon">&#x1FA99;</span>
-        <span class="badge-num" id="coinCount">0</span>
-      </div>
-      <div class="game-badge badge-gems">
-        <span class="badge-icon">&#x1F48E;</span>
-        <span class="badge-num" id="gemCount">0</span>
+    <div class="wheel-assembly">
+      <div class="wheel-area">
+        <div class="pointer-container">
+          <div class="pointer" id="pointer"></div>
+        </div>
+        <div class="wheel-glow" id="wheelGlow"></div>
+        <canvas id="wheelCanvas" width="500" height="500"></canvas>
+        <button class="spin-btn" id="spinBtn">
+          <span class="spin-btn-text">SPIN!</span>
+        </button>
       </div>
 
-      <div class="mascot mascot-side mascot-side-left" id="mascotLeft">
-        <div class="mascot-body">&#x1F98A;</div>
-        <div class="mascot-speech" id="speechLeft">Spin the wheel!</div>
+      <div class="pedestal">
+        <div class="pedestal-column">
+          <div class="marquee-row marquee-row-column"></div>
+        </div>
+        <div class="pedestal-base">
+          <div class="marquee-row marquee-row-base"></div>
+          <div class="control-panel">
+            <div class="joystick">
+              <div class="joystick-base"></div>
+              <div class="joystick-stick"></div>
+              <div class="joystick-ball"></div>
+            </div>
+            <div class="arcade-buttons">
+              <button class="arcade-btn arcade-btn-gold" type="button" aria-hidden="true" tabindex="-1"></button>
+              <button class="arcade-btn arcade-btn-magenta" type="button" aria-hidden="true" tabindex="-1"></button>
+              <button class="arcade-btn arcade-btn-blue" type="button" aria-hidden="true" tabindex="-1"></button>
+            </div>
+          </div>
+        </div>
+        <div class="pedestal-orb"></div>
       </div>
-      <div class="mascot mascot-side mascot-side-right" id="mascotRight">
-        <div class="mascot-body">&#x1F430;</div>
-        <div class="mascot-speech" id="speechRight">Good luck!</div>
-      </div>
-
-      <div class="pointer-container">
-        <div class="pointer" id="pointer"></div>
-      </div>
-      <div class="wheel-glow" id="wheelGlow"></div>
-      <canvas id="wheelCanvas" width="500" height="500"></canvas>
-      <button class="spin-btn" id="spinBtn">
-        <span class="spin-btn-text">SPIN!</span>
-      </button>
     </div>
 
     <div class="result-banner hidden" id="resultBanner">
@@ -76,6 +88,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/supabaseClient.js"></script>
+  <script src="js/background.js"></script>
   <script src="js/wheel.js"></script>
   <script src="js/spin.js"></script>
 </body>

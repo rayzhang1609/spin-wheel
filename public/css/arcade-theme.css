@@ -1,0 +1,552 @@
+/* ============================================================
+   ARCADE THEME — violet/purple re-theme
+   Replaces the space/starfield look with an arcade-machine
+   aesthetic: violet gradient, bokeh light orbs, pedestal stand,
+   top bar icon buttons, solid banner title, rainbow wedges.
+   ============================================================ */
+
+:root {
+  --arcade-violet-dark: #1a0a2e;
+  --arcade-violet: #2d1b4e;
+  --arcade-violet-light: #4a2c7a;
+  --arcade-purple: #7B4FE0;
+  --arcade-pink: #E91E8C;
+  --arcade-blue: #42A5F5;
+  --arcade-gold: #FFD700;
+  --arcade-gold-dark: #F57F17;
+  --arcade-panel-blue: #B3D4FC;
+  --arcade-panel-blue-border: #4A90D9;
+  --arcade-icon-bg: rgba(20, 10, 40, 0.7);
+  --arcade-icon-border: rgba(180, 200, 255, 0.5);
+}
+
+/* ===== Body: violet gradient base ===== */
+body {
+  background: radial-gradient(ellipse at 50% 38%, #3d1f6e 0%, #2a1545 35%, #1a0a2e 70%, #0d0518 100%) !important;
+  font-family: 'Nunito', 'Comic Neue', sans-serif;
+}
+
+/* ===== Bokeh light orbs layer ===== */
+.bokeh-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.bokeh-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(40px);
+  opacity: 0.2;
+  animation: lightFlash var(--flash-dur, 3s) ease-in-out infinite;
+}
+
+@keyframes lightFlash {
+  0%   { opacity: 0.05; transform: scale(0.95); }
+  45%  { opacity: 0.6;  transform: scale(1.05); }
+  55%  { opacity: 0.6;  transform: scale(1.05); }
+  100% { opacity: 0.05; transform: scale(0.95); }
+}
+
+/* ===== Vignette (keep from prior, restyle for violet) ===== */
+.vignette {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 40%, transparent 40%, rgba(10, 5, 24, 0.4) 75%, rgba(10, 5, 24, 0.7) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ===== Top bar ===== */
+.top-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  z-index: 50;
+  pointer-events: none;
+}
+.top-bar > * { pointer-events: auto; }
+
+.top-icon-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--arcade-icon-bg);
+  border: 2px solid var(--arcade-icon-border);
+  color: #e8eaf6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s;
+  backdrop-filter: blur(8px);
+}
+.top-icon-btn:hover {
+  transform: scale(1.08);
+  border-color: rgba(255,255,255,0.8);
+}
+.top-icon-btn:active {
+  transform: scale(0.93);
+}
+
+.top-currency {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: var(--arcade-icon-bg);
+  border: 2px solid var(--arcade-icon-border);
+  backdrop-filter: blur(8px);
+}
+.currency-coin {
+  font-size: 1.1rem;
+  filter: drop-shadow(0 0 4px rgba(255,215,0,0.5));
+}
+.currency-num {
+  font-family: 'Bubblegum Sans', cursive;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+  min-width: 20px;
+  text-align: center;
+}
+.currency-num.bump {
+  animation: numBump 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes numBump {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.4); color: var(--arcade-gold); }
+  100% { transform: scale(1); }
+}
+
+/* ===== Title banner (solid panel, not glow text) ===== */
+.title-banner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 36px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--arcade-panel-blue), #8EC5FC);
+  border: 3px solid var(--arcade-panel-blue-border);
+  font-family: 'Bubblegum Sans', cursive;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.35), inset 0 2px 4px rgba(255,255,255,0.3);
+  margin-bottom: 4px;
+}
+
+/* ===== Wheel assembly (wheel + pedestal wrapper) ===== */
+.wheel-assembly {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ===== Pedestal / stand ===== */
+.pedestal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: -20px;
+  position: relative;
+  z-index: 1;
+}
+.pedestal-column {
+  width: 80px;
+  height: 50px;
+  background: linear-gradient(180deg, var(--arcade-pink), #c2185b);
+  border-radius: 8px 8px 4px 4px;
+  border: 2px solid rgba(0,0,0,0.3);
+  border-top: none;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 4px;
+}
+.pedestal-base {
+  width: 220px;
+  height: 96px;
+  background: linear-gradient(180deg, var(--arcade-blue), #1565c0);
+  border-radius: 10px;
+  border: 3px solid rgba(0,0,0,0.35);
+  border-top: 2px solid rgba(255,255,255,0.25);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-end;
+  position: relative;
+  overflow: hidden;
+  padding-bottom: 10px;
+}
+
+/* ===== Marquee bulb trim ===== */
+.marquee-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+.marquee-row-base {
+  height: 14px;
+  padding: 0 8px;
+  flex: 0 0 auto;
+}
+.marquee-row-column {
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 4px;
+  padding: 2px 0;
+}
+.marquee-bulb {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  box-shadow: 0 0 6px 1px currentColor, 0 0 2px rgba(255,255,255,0.6) inset;
+  opacity: 0.25;
+  animation: marqueeFlash var(--flash-dur, 2.6s) ease-in-out infinite;
+}
+.marquee-row-column .marquee-bulb { width: 6px; height: 6px; }
+
+@keyframes marqueeFlash {
+  0%   { opacity: 0.2; box-shadow: 0 0 3px 0 currentColor; }
+  45%  { opacity: 1;   box-shadow: 0 0 10px 2px currentColor, 0 0 3px rgba(255,255,255,0.8) inset; }
+  55%  { opacity: 1;   box-shadow: 0 0 10px 2px currentColor, 0 0 3px rgba(255,255,255,0.8) inset; }
+  100% { opacity: 0.2; box-shadow: 0 0 3px 0 currentColor; }
+}
+
+/* ===== Claw-machine control panel ===== */
+.control-panel {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 18px;
+  padding: 6px 10px 2px;
+  flex: 1 1 auto;
+}
+
+/* Joystick */
+.joystick {
+  position: relative;
+  width: 30px;
+  height: 52px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+}
+.joystick-base {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #3a3f52, #1a1d2b);
+  border: 2px solid rgba(0,0,0,0.5);
+  box-shadow: 0 3px 6px rgba(0,0,0,0.5), inset 0 2px 3px rgba(255,255,255,0.12);
+  z-index: 2;
+}
+.joystick-stick {
+  position: absolute;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 24px;
+  background: linear-gradient(90deg, #2a2d3d, #454a63, #2a2d3d);
+  border-radius: 3px;
+  z-index: 1;
+}
+.joystick-ball {
+  position: absolute;
+  bottom: 38px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #FFE27A, var(--arcade-gold), var(--arcade-gold-dark));
+  border: 2px solid rgba(0,0,0,0.4);
+  box-shadow: 0 3px 6px rgba(0,0,0,0.5), inset 0 -2px 3px rgba(0,0,0,0.25);
+  z-index: 3;
+}
+
+/* Arcade buttons */
+.arcade-buttons {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+.arcade-btn {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid rgba(0,0,0,0.45);
+  box-shadow: 0 3px 5px rgba(0,0,0,0.5), inset 0 -3px 4px rgba(0,0,0,0.35);
+  cursor: default;
+  padding: 0;
+}
+.arcade-btn-gold {
+  background: radial-gradient(circle at 35% 30%, #FFF3B0, var(--arcade-gold), var(--arcade-gold-dark));
+}
+.arcade-btn-magenta {
+  background: radial-gradient(circle at 35% 30%, #FF9DD0, var(--arcade-pink), #ad1457);
+}
+.arcade-btn-blue {
+  background: radial-gradient(circle at 35% 30%, #B3D9FF, var(--arcade-blue), #0d47a1);
+}
+
+.pedestal-orb {
+  position: absolute;
+  bottom: -8px;
+  right: 10px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #FFE27A, var(--arcade-gold), var(--arcade-gold-dark));
+  border: 2px solid rgba(0,0,0,0.3);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+/* ===== Wheel glow (violet, not rainbow) ===== */
+.wheel-glow {
+  background: radial-gradient(circle, rgba(123,79,224,0.3), rgba(233,30,140,0.15), transparent 70%) !important;
+  filter: blur(30px) !important;
+}
+
+/* ===== Spin button — clean star hub style ===== */
+.spin-btn {
+  width: 80px !important;
+  height: 80px !important;
+  min-width: 64px !important;
+  min-height: 64px !important;
+  max-width: 90px !important;
+  max-height: 90px !important;
+  border: 3px solid var(--arcade-gold) !important;
+  background: radial-gradient(circle at 35% 35%, #4a2c7a, #1a0a2e) !important;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.5), inset 0 -3px 6px rgba(0,0,0,0.3), inset 0 2px 4px rgba(255,255,255,0.15) !important;
+  animation: none !important;
+}
+.knockout-spin {
+  background: radial-gradient(circle at 35% 35%, #5a2c5a, #2a0a1e) !important;
+}
+.spin-btn:hover {
+  transform: translate(-50%, -50%) scale(1.06) !important;
+  box-shadow: 0 8px 22px rgba(0,0,0,0.6), inset 0 -3px 6px rgba(0,0,0,0.3), inset 0 2px 4px rgba(255,255,255,0.2) !important;
+}
+.spin-btn:active {
+  transform: translate(-50%, -50%) scale(0.93) !important;
+}
+.spin-btn-text {
+  display: none !important;
+}
+/* Gold star icon on the hub button (via ::after) */
+.spin-btn::after {
+  content: '\2605';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2rem;
+  color: var(--arcade-gold);
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  pointer-events: none;
+}
+
+/* ===== Pointer — violet tone ===== */
+.pointer {
+  border-top: 40px solid var(--arcade-purple) !important;
+  border-left: 20px solid transparent !important;
+  border-right: 20px solid transparent !important;
+  background: none !important;
+}
+.pointer::after {
+  background: radial-gradient(circle at 35% 35%, #B388FF, var(--arcade-purple)) !important;
+  border: 2px solid rgba(60, 20, 100, 0.6) !important;
+  box-shadow: 0 0 12px rgba(123,79,224,0.5) !important;
+}
+
+/* ===== Reset / control buttons — panel style ===== */
+.ctrl-btn,
+.knockout-restart {
+  padding: 10px 28px !important;
+  border-radius: 12px !important;
+  border: 2px solid var(--arcade-panel-blue-border) !important;
+  background: linear-gradient(135deg, var(--arcade-panel-blue), #6FA8DC) !important;
+  color: #fff !important;
+  font-family: 'Bubblegum Sans', cursive !important;
+  font-weight: 700 !important;
+  font-size: 0.95rem !important;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.3), inset 0 2px 4px rgba(255,255,255,0.25) !important;
+  transition: transform 0.15s, box-shadow 0.15s !important;
+  backdrop-filter: none !important;
+}
+.reset-btn:hover,
+.knockout-restart:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 7px 18px rgba(0,0,0,0.4), inset 0 2px 4px rgba(255,255,255,0.35) !important;
+}
+.reset-btn:active,
+.knockout-restart:active {
+  transform: translateY(2px) !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3), inset 0 2px 4px rgba(0,0,0,0.2) !important;
+}
+
+/* ===== Win popup — recolored to violet/gold ===== */
+.result-content {
+  background: linear-gradient(135deg, var(--arcade-violet-light), var(--arcade-violet-dark)) !important;
+  border: 3px solid var(--arcade-gold) !important;
+  box-shadow: 0 16px 60px rgba(0,0,0,0.6), 0 0 50px rgba(255,215,0,0.25) !important;
+}
+.result-text {
+  color: var(--arcade-gold) !important;
+}
+.result-emoji {
+  filter: drop-shadow(0 0 10px rgba(255,215,0,0.4));
+}
+.result-close {
+  background: linear-gradient(135deg, var(--arcade-panel-blue), #6FA8DC) !important;
+  border: 2px solid var(--arcade-panel-blue-border) !important;
+}
+
+/* ===== Won popup (knockout) recolored ===== */
+.won-popup {
+  background: linear-gradient(135deg, var(--arcade-violet-light), var(--arcade-violet-dark)) !important;
+  border: 3px solid var(--arcade-gold) !important;
+  box-shadow: 0 0 50px rgba(255,215,0,0.4), 0 20px 60px rgba(0,0,0,0.5) !important;
+}
+.won-text { color: var(--arcade-gold) !important; }
+.won-item { color: #e8eaf6 !important; }
+
+/* ===== Knockout status badge recolor ===== */
+.knockout-status {
+  background: linear-gradient(135deg, rgba(123,79,224,0.25), rgba(233,30,140,0.15)) !important;
+  border: 2px solid rgba(123,79,224,0.55) !important;
+}
+.remaining-count {
+  color: var(--arcade-gold) !important;
+}
+
+/* ===== Winner banner recolor ===== */
+.knockout-winner {
+  background: linear-gradient(135deg, rgba(123,79,224,0.2), rgba(255,215,0,0.1)) !important;
+  border: 2px solid var(--arcade-gold) !important;
+}
+.winner-text { color: var(--arcade-gold) !important; }
+.winner-sub { color: var(--arcade-pink) !important; }
+
+/* ===== Sync indicator recolor ===== */
+.sync-dot {
+  background: var(--arcade-blue) !important;
+}
+
+/* ===== Hide old elements that are no longer in HTML ===== */
+.stars, .stars-mid, .shooting-stars, .nebula, .bg-decor,
+.spotlight-pool, .mascot, .event-banner, .game-badge {
+  display: none !important;
+}
+
+/* ===== Mobile layout (phone-width column) ===== */
+body {
+  align-items: center;
+  justify-content: flex-start;
+}
+.container {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 60px 14px 36px;
+  gap: 12px;
+  min-height: 100vh;
+  z-index: 1;
+  position: relative;
+}
+
+.title-banner { font-size: 1.3rem; padding: 8px 28px; }
+
+.wheel-area {
+  width: min(88vw, 340px);
+  height: min(88vw, 340px);
+}
+#wheelCanvas { width: 100% !important; height: 100% !important; }
+
+.pointer {
+  border-top-width: 28px !important;
+  border-left-width: 14px !important;
+  border-right-width: 14px !important;
+}
+.pointer::after { width: 14px; height: 14px; left: -7px; top: -28px; }
+
+.spin-btn { min-width: 54px !important; min-height: 54px !important; max-width: 72px !important; max-height: 72px !important; }
+.spin-btn::after { font-size: 1.5rem; }
+
+.pedestal-column { width: 60px; height: 36px; }
+.pedestal-base { width: 180px; height: 74px; }
+.pedestal-orb { width: 16px; height: 16px; right: 8px; }
+.control-panel { gap: 12px; padding: 4px 8px 2px; }
+.joystick { width: 24px; height: 42px; }
+.joystick-base { width: 20px; height: 20px; }
+.joystick-stick { height: 18px; bottom: 14px; }
+.joystick-ball { width: 14px; height: 14px; bottom: 30px; }
+.arcade-btn { width: 18px; height: 18px; }
+.arcade-buttons { gap: 6px; }
+.marquee-bulb { width: 6px; height: 6px; }
+
+.top-icon-btn { width: 38px; height: 38px; }
+.top-currency { padding: 6px 14px; }
+.currency-num { font-size: 0.95rem; }
+.currency-coin { font-size: 0.95rem; }
+
+.ctrl-btn, .knockout-restart { padding: 9px 22px !important; font-size: 0.85rem !important; }
+
+.result-content { padding: 32px 28px !important; }
+.result-emoji { font-size: 3.5rem !important; }
+.result-text { font-size: 1.8rem !important; }
+.result-close { padding: 10px 30px !important; font-size: 0.9rem !important; }
+
+.won-popup { padding: 24px !important; }
+.won-text { font-size: 1.6rem !important; }
+.won-item { font-size: 1.2rem !important; }
+
+.knockout-status { font-size: 0.85rem; padding: 5px 12px; }
+.remaining-count { font-size: 1.2rem !important; }
+.eliminated-tag { font-size: 0.68rem; padding: 3px 8px; }
+.knockout-winner { padding: 16px; }
+.winner-text { font-size: 1.3rem; }
+.winner-crown { font-size: 2.5rem; }
+
+/* ===== Reduced motion ===== */
+@media (prefers-reduced-motion: reduce) {
+  .wheel-glow,
+  .spin-btn,
+  .title-banner,
+  .top-icon-btn,
+  .ctrl-btn,
+  .reset-btn,
+  .knockout-restart {
+    animation: none !important;
+    transition: none !important;
+  }
+  .bokeh-orb,
+  .marquee-bulb {
+    animation: none !important;
+    opacity: 0.6 !important;
+  }
+}

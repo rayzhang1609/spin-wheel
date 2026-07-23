@@ -1,0 +1,16 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img">
+<title>Alien mascot</title>
+<desc>Cute green alien bust icon with glowing antennae</desc>
+<path d="M40,196 Q40,148 100,148 Q160,148 160,196 Z" fill="#7E57C2" stroke="#5E35B1" stroke-width="4"/>
+<ellipse cx="100" cy="150" rx="40" ry="13" fill="#B388FF" stroke="#5E35B1" stroke-width="3"/>
+<path d="M78,20 Q60,16 74,10" fill="none" stroke="#388E3C" stroke-width="4" stroke-linecap="round"/>
+<circle cx="74" cy="9" r="8" fill="#FF6FA5" stroke="#C2185B" stroke-width="2"/>
+<path d="M122,20 Q140,16 126,10" fill="none" stroke="#388E3C" stroke-width="4" stroke-linecap="round"/>
+<circle cx="126" cy="9" r="8" fill="#FF6FA5" stroke="#C2185B" stroke-width="2"/>
+<path d="M100,28 C58,28 42,70 53,112 C61,144 80,152 100,152 C120,152 139,144 147,112 C158,70 142,28 100,28 Z" fill="#66BB6A" stroke="#388E3C" stroke-width="4"/>
+<ellipse cx="76" cy="92" rx="16" ry="22" fill="#212121" transform="rotate(-15 76 92)"/>
+<circle cx="80" cy="83" r="4" fill="#FFFFFF"/>
+<ellipse cx="124" cy="92" rx="16" ry="22" fill="#212121" transform="rotate(15 124 92)"/>
+<circle cx="120" cy="83" r="4" fill="#FFFFFF"/>
+<path d="M85,122 Q100,132 115,122" fill="none" stroke="#2E7D32" stroke-width="3" stroke-linecap="round"/>
+</svg>

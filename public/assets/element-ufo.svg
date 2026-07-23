@@ -1,0 +1,22 @@
+<svg viewBox="0 0 220 140" xmlns="http://www.w3.org/2000/svg" role="img">
+<title>UFO</title>
+<desc>Decorative flying saucer with a gold light-studded rim and a soft blue beam</desc>
+<defs>
+<linearGradient id="ufoDomeGrad" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#E1F5FE"/>
+<stop offset="100%" stop-color="#81D4FA"/>
+</linearGradient>
+<linearGradient id="ufoBeamGrad" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#B3E5FC" stop-opacity="0.6"/>
+<stop offset="100%" stop-color="#B3E5FC" stop-opacity="0"/>
+</linearGradient>
+</defs>
+<path d="M70,85 L40,130 L180,130 L150,85 Z" fill="url(#ufoBeamGrad)"/>
+<ellipse cx="110" cy="60" rx="55" ry="26" fill="#F8BBD0" stroke="#E91E8C" stroke-width="4"/>
+<circle cx="70" cy="62" r="6" fill="#FFD700" stroke="#F57F17" stroke-width="2"/>
+<circle cx="95" cy="70" r="6" fill="#FFD700" stroke="#F57F17" stroke-width="2"/>
+<circle cx="125" cy="70" r="6" fill="#FFD700" stroke="#F57F17" stroke-width="2"/>
+<circle cx="150" cy="62" r="6" fill="#FFD700" stroke="#F57F17" stroke-width="2"/>
+<ellipse cx="110" cy="42" rx="34" ry="24" fill="url(#ufoDomeGrad)" stroke="#0288D1" stroke-width="4"/>
+<ellipse cx="98" cy="32" rx="10" ry="6" fill="#FFFFFF" opacity="0.6"/>
+</svg>

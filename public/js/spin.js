@@ -56,71 +56,9 @@ const idleMessages = [
   "Ready to win?", "Go go go!"
 ];
 
-function createStars() {
-  const container = document.getElementById('stars');
-  const count = 50 + Math.floor(Math.random() * 40);
-  const colors = ['#ffffff', '#ff1493', '#00d4ff', '#ffd700', '#00ff88', '#da70d6'];
-  for (let i = 0; i < count; i++) {
-    const star = document.createElement('div');
-    star.className = 'star';
-    const size = 1 + Math.random() * 4;
-    star.style.width = size + 'px';
-    star.style.height = size + 'px';
-    star.style.left = Math.random() * 100 + '%';
-    star.style.top = Math.random() * 100 + '%';
-    star.style.background = colors[Math.floor(Math.random() * colors.length)];
-    star.style.setProperty('--dur', (0.5 + Math.random() * 3) + 's');
-    star.style.setProperty('--delay', (Math.random() * 4) + 's');
-    container.appendChild(star);
-  }
-}
-
-function createShootingStars() {
-  const container = document.getElementById('shootingStars');
-  const colors = ['#ffffff', '#00d4ff', '#ffd700', '#ff69b4', '#00ff88'];
-
-  function spawnStar() {
-    const star = document.createElement('div');
-    star.className = 'shooting-star';
-    star.style.left = (10 + Math.random() * 80) + '%';
-    star.style.top = (5 + Math.random() * 40) + '%';
-    star.style.setProperty('--angle', (-50 + Math.random() * 30) + 'deg');
-    star.style.setProperty('--len', (60 + Math.random() * 120) + 'px');
-    star.style.setProperty('--travel', (400 + Math.random() * 500) + 'px');
-    star.style.setProperty('--shoot-dur', (0.5 + Math.random() * 0.7) + 's');
-    star.style.setProperty('--star-color', colors[Math.floor(Math.random() * colors.length)]);
-    container.appendChild(star);
-
-    const dur = parseFloat(star.style.getPropertyValue('--shoot-dur')) * 1000 + 200;
-    setTimeout(() => star.remove(), dur);
-  }
-
-  setInterval(() => {
-    if (Math.random() < 0.4) spawnStar();
-  }, 1200);
-
-  setTimeout(() => { spawnStar(); spawnStar(); }, 500);
-  setTimeout(spawnStar, 2500);
-}
-
-function rotateMascots() {
-  const speeches = document.querySelectorAll('.mascot-speech');
-  function pickRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
-
-  setInterval(() => {
-    speeches.forEach(el => {
-      el.textContent = pickRandom(idleMessages);
-    });
-  }, 6000);
-
-  if (spinBtn) {
-    spinBtn.addEventListener('click', () => {
-      speeches.forEach(el => {
-        el.textContent = pickRandom(spinMessages);
-      });
-    });
-  }
-}
+function createStars() {}
+function createShootingStars() {}
+function rotateMascots() {}
 
 // ===== Data layer: load wheel config from Supabase and poll for edits =====
 async function fetchSpinConfig() {

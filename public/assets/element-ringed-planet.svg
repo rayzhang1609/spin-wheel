@@ -1,0 +1,17 @@
+<svg viewBox="0 0 200 170" xmlns="http://www.w3.org/2000/svg" role="img">
+<title>Ringed planet</title>
+<desc>Decorative gold ringed planet icon with small nearby stars</desc>
+<defs>
+<radialGradient id="planetGrad" cx="35%" cy="35%" r="70%">
+<stop offset="0%" stop-color="#FFE082"/>
+<stop offset="100%" stop-color="#F57C00"/>
+</radialGradient>
+</defs>
+<path d="M20,90 l4,-10 l4,10 l10,4 l-10,4 l-4,10 l-4,-10 l-10,-4 Z" fill="#FFD700" opacity="0.8"/>
+<path d="M170,40 l3,-7 l3,7 l7,3 l-7,3 l-3,7 l-3,-7 l-7,-3 Z" fill="#FFD700" opacity="0.7"/>
+<circle cx="160" cy="120" r="4" fill="#FFFFFF" opacity="0.8"/>
+<ellipse cx="100" cy="85" rx="88" ry="24" fill="none" stroke="#C68642" stroke-width="9" opacity="0.9" transform="rotate(-12 100 85)"/>
+<circle cx="100" cy="85" r="46" fill="url(#planetGrad)" stroke="#E65100" stroke-width="3"/>
+<ellipse cx="82" cy="70" rx="9" ry="5" fill="#F57C00" opacity="0.5" transform="rotate(-10 82 70)"/>
+<ellipse cx="116" cy="98" rx="7" ry="4" fill="#F57C00" opacity="0.5" transform="rotate(10 116 98)"/>
+</svg>

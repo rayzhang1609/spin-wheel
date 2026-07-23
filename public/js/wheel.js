@@ -6,8 +6,8 @@ class SpinWheel {
     this.rotation = 0;
     this.isSpinning = false;
     this.onSpinEnd = options.onSpinEnd || (() => {});
-    this.hubColor = options.hubColor || '#ff1493';
-    this.hubColorLight = options.hubColorLight || '#ff69b4';
+    this.hubColor = options.hubColor || '#1a0a2e';
+    this.hubColorLight = options.hubColorLight || '#4a2c7a';
     this.pointerEl = options.pointerEl || null;
     this.muted = options.muted || false;
 
@@ -45,6 +45,12 @@ class SpinWheel {
     requestAnimationFrame(loop);
   }
 
+  // Rainbow palette for wedges (cycles if more than 8 items)
+  static RAINBOW = [
+    '#FF9800', '#FF5252', '#E91E8C', '#7B4FE0',
+    '#5C6BC0', '#42A5F5', '#66BB6A', '#C0CA33'
+  ];
+
   draw(now) {
     if (now === undefined) now = this.reducedMotion ? 0 : performance.now();
     const ctx = this.ctx;
@@ -55,25 +61,24 @@ class SpinWheel {
 
     const n = this.items.length;
     const sliceAngle = (2 * Math.PI) / n;
-    const rimThickness = Math.max(10, r * 0.075);
+    const rimThickness = Math.max(12, r * 0.09);
     const wedgeR = r - rimThickness;
-    const bulbR = rimThickness * 0.4;
-    const bulbRingR = r - rimThickness / 2;
-    const hubR = r * 0.17;
-    const hubFaceR = hubR * 0.78;
+    const hubR = r * 0.16;
+    const hubFaceR = hubR * 0.82;
 
+    // Base shadow disk (violet bezel color, gives the whole wheel its drop shadow)
     ctx.save();
     ctx.translate(cx, cy);
     ctx.shadowColor = 'rgba(0,0,0,0.6)';
-    ctx.shadowBlur = 32;
-    ctx.shadowOffsetY = 18;
-    ctx.fillStyle = '#8E5E12';
+    ctx.shadowBlur = 30;
+    ctx.shadowOffsetY = 16;
+    ctx.fillStyle = '#4a2c7a';
     ctx.beginPath();
     ctx.arc(0, 0, r, 0, Math.PI * 2);
     ctx.fill();
     ctx.restore();
 
-    // ===== SINGLE rotating group: wedges + chips + labels + rim + bulb ring =====
+    // ===== Rotating group: wedges + chips + labels =====
     ctx.save();
     ctx.translate(cx, cy);
     ctx.rotate(this.rotation);
@@ -81,29 +86,30 @@ class SpinWheel {
     this.items.forEach((item, i) => {
       const startAngle = i * sliceAngle - Math.PI / 2;
       const endAngle = startAngle + sliceAngle;
+      const wedgeColor = item.color || SpinWheel.RAINBOW[i % SpinWheel.RAINBOW.length];
 
       ctx.beginPath();
       ctx.moveTo(0, 0);
       ctx.arc(0, 0, wedgeR, startAngle, endAngle);
       ctx.closePath();
 
-      const grad = ctx.createRadialGradient(0, 0, wedgeR * 0.12, 0, 0, wedgeR);
-      grad.addColorStop(0, this.lighten(item.color, 12));
-      grad.addColorStop(1, item.color);
+      const grad = ctx.createRadialGradient(0, 0, wedgeR * 0.08, 0, 0, wedgeR);
+      grad.addColorStop(0, this.lighten(wedgeColor, 18));
+      grad.addColorStop(1, wedgeColor);
       ctx.fillStyle = grad;
       ctx.fill();
 
       ctx.strokeStyle = 'rgba(255,255,255,0.92)';
-      ctx.lineWidth = Math.max(4, r * 0.012);
+      ctx.lineWidth = Math.max(3, r * 0.01);
       ctx.lineJoin = 'round';
       ctx.stroke();
 
       ctx.save();
       ctx.rotate(startAngle + sliceAngle / 2);
 
-      const chipR = wedgeR * 0.15;
+      const chipR = wedgeR * 0.14;
       const chipX = wedgeR * 0.6;
-      const labelR = wedgeR * 0.36;
+      const labelR = wedgeR * 0.34;
 
       const isWin = i === this.winningIndex;
       let popScale = 1;
@@ -114,6 +120,7 @@ class SpinWheel {
         winGlow = (1 - t) * 0.9;
       }
 
+      // Icon chip
       ctx.save();
       ctx.translate(chipX, 0);
       ctx.scale(popScale, popScale);
@@ -122,15 +129,15 @@ class SpinWheel {
         ctx.shadowColor = 'rgba(255,255,255,' + winGlow + ')';
         ctx.shadowBlur = 28;
       } else {
-        ctx.shadowColor = 'rgba(0,0,0,0.45)';
-        ctx.shadowBlur = 8;
-        ctx.shadowOffsetY = 4;
+        ctx.shadowColor = 'rgba(0,0,0,0.4)';
+        ctx.shadowBlur = 6;
+        ctx.shadowOffsetY = 3;
       }
 
-      const chipGrad = ctx.createRadialGradient(-chipR * 0.35, -chipR * 0.35, chipR * 0.1, 0, 0, chipR);
+      const chipGrad = ctx.createRadialGradient(-chipR * 0.3, -chipR * 0.3, chipR * 0.1, 0, 0, chipR);
       chipGrad.addColorStop(0, '#FFFFFF');
-      chipGrad.addColorStop(0.7, '#FFF6E0');
-      chipGrad.addColorStop(1, '#F0DFA8');
+      chipGrad.addColorStop(0.7, '#FFF8E1');
+      chipGrad.addColorStop(1, '#FFE082');
       ctx.beginPath();
       ctx.arc(0, 0, chipR, 0, Math.PI * 2);
       ctx.fillStyle = chipGrad;
@@ -138,30 +145,25 @@ class SpinWheel {
       ctx.shadowBlur = 0;
       ctx.shadowOffsetY = 0;
 
-      ctx.lineWidth = Math.max(2, chipR * 0.12);
-      ctx.strokeStyle = this.toRgba(item.color, 0.85);
-      ctx.stroke();
-
-      ctx.beginPath();
-      ctx.arc(0, 0, chipR - chipR * 0.1, 0, Math.PI * 2);
-      ctx.lineWidth = Math.max(1, chipR * 0.06);
-      ctx.strokeStyle = 'rgba(255,255,255,0.55)';
+      ctx.lineWidth = Math.max(2, chipR * 0.1);
+      ctx.strokeStyle = this.toRgba(wedgeColor, 0.8);
       ctx.stroke();
 
       if (item.emoji) {
-        ctx.font = (chipR * 1.15) + 'px serif';
+        ctx.font = (chipR * 1.1) + 'px serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(item.emoji, 0, chipR * 0.05);
       }
       ctx.restore();
 
-      ctx.font = 'bold ' + Math.max(11, r * 0.072) + "px 'Nunito', sans-serif";
+      // Label text — bold white with dark stroke for legibility on all wedge colors
+      ctx.font = 'bold ' + Math.max(11, r * 0.068) + "px 'Nunito', sans-serif";
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillStyle = this.getContrastColor(item.color);
-      ctx.lineWidth = Math.max(3, r * 0.012);
-      ctx.strokeStyle = this.getContrastColor(item.color) === '#ffffff' ? 'rgba(10,16,48,0.85)' : 'rgba(255,255,255,0.85)';
+      ctx.fillStyle = '#ffffff';
+      ctx.lineWidth = Math.max(3, r * 0.011);
+      ctx.strokeStyle = 'rgba(10,5,24,0.8)';
       ctx.lineJoin = 'round';
       if (item.label) {
         const lbl = item.label.length > 12 ? item.label.slice(0, 11) + '\u2026' : item.label;
@@ -172,74 +174,48 @@ class SpinWheel {
       ctx.restore();
     });
 
+    ctx.restore(); // end rotating group
+
+    // ===== Violet bezel rim (stationary, no studs) =====
+    ctx.save();
+    ctx.translate(cx, cy);
+
+    // Main bezel ring — radial gradient: highlight on top, shadow on bottom
     ctx.beginPath();
     ctx.arc(0, 0, wedgeR + rimThickness * 0.5, 0, Math.PI * 2);
     ctx.lineWidth = rimThickness;
-    const rimGrad = ctx.createRadialGradient(0, 0, wedgeR, 0, 0, r);
-    rimGrad.addColorStop(0, '#8E5E12');
-    rimGrad.addColorStop(0.3, '#C98A1E');
-    rimGrad.addColorStop(0.65, '#E0A93A');
-    rimGrad.addColorStop(1, '#FFE27A');
+    const rimGrad = ctx.createLinearGradient(0, -r, 0, r);
+    rimGrad.addColorStop(0, '#B388FF');
+    rimGrad.addColorStop(0.3, '#7B4FE0');
+    rimGrad.addColorStop(0.7, '#5C3A9E');
+    rimGrad.addColorStop(1, '#3D2466');
     ctx.strokeStyle = rimGrad;
     ctx.stroke();
 
+    // Highlight arc along top-inner edge
     ctx.beginPath();
-    ctx.arc(0, 0, r - 1, 0, Math.PI * 2);
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+    ctx.arc(0, 0, wedgeR + rimThickness * 0.25, -Math.PI * 0.8, -Math.PI * 0.2);
+    ctx.lineWidth = Math.max(2, rimThickness * 0.2);
+    ctx.strokeStyle = 'rgba(255,255,255,0.35)';
     ctx.stroke();
 
+    // Shadow line along bottom-outer edge
     ctx.beginPath();
-    ctx.arc(0, 0, wedgeR, 0, Math.PI * 2);
-    ctx.lineWidth = 2;
+    ctx.arc(0, 0, r - 1, Math.PI * 0.15, Math.PI * 0.85);
+    ctx.lineWidth = Math.max(2, rimThickness * 0.15);
     ctx.strokeStyle = 'rgba(0,0,0,0.4)';
     ctx.stroke();
 
-    for (let i = 0; i < n; i++) {
-      const boundaryAngle = i * sliceAngle - Math.PI / 2;
-      const bx = Math.cos(boundaryAngle) * bulbRingR;
-      const by = Math.sin(boundaryAngle) * bulbRingR;
-
-      let pulse;
-      if (this.reducedMotion) {
-        pulse = 0.85;
-      } else if (this.isSpinning) {
-        pulse = 0.55 + 0.45 * Math.abs(Math.sin(now / 90 + i * 0.9));
-      } else {
-        pulse = 0.6 + 0.4 * Math.sin(now / 650 + i * 0.7);
-      }
-
-      let winBoost = 0;
-      if (this.winningIndex >= 0 && !this.reducedMotion) {
-        if (i === this.winningIndex || i === (this.winningIndex + 1) % n) {
-          const t = Math.min((now - this.winFlashStart) / 600, 1);
-          winBoost = (1 - t) * 0.85;
-        }
-      }
-      const intensity = Math.min(1, pulse + winBoost);
-
-      ctx.save();
-      ctx.shadowColor = 'rgba(255, 240, 180, ' + (0.6 * intensity) + ')';
-      ctx.shadowBlur = 8 * intensity;
-      const bg = ctx.createRadialGradient(bx - bulbR * 0.35, by - bulbR * 0.35, bulbR * 0.1, bx, by, bulbR);
-      bg.addColorStop(0, 'rgba(255,255,255,' + (0.95 * intensity + 0.05) + ')');
-      bg.addColorStop(0.5, 'rgba(255,238,180,' + (0.85 * intensity + 0.15) + ')');
-      bg.addColorStop(1, 'rgba(212,160,23,' + (0.7 * intensity + 0.3) + ')');
-      ctx.beginPath();
-      ctx.arc(bx, by, bulbR, 0, Math.PI * 2);
-      ctx.fillStyle = bg;
-      ctx.fill();
-      ctx.restore();
-
-      ctx.beginPath();
-      ctx.arc(bx, by, bulbR, 0, Math.PI * 2);
-      ctx.lineWidth = 1;
-      ctx.strokeStyle = 'rgba(80,50,10,0.5)';
-      ctx.stroke();
-    }
+    // Dark separator between rim and wedges
+    ctx.beginPath();
+    ctx.arc(0, 0, wedgeR, 0, Math.PI * 2);
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = 'rgba(0,0,0,0.5)';
+    ctx.stroke();
 
     ctx.restore();
 
+    // ===== Center hub: clean dark badge + gold ring + gold star =====
     ctx.save();
     ctx.translate(cx, cy);
     this.drawHub(ctx, hubR, hubFaceR, now);
@@ -248,14 +224,16 @@ class SpinWheel {
 
   drawHub(ctx, hubR, faceR, now) {
     ctx.save();
-    ctx.shadowColor = 'rgba(0,0,0,0.6)';
-    ctx.shadowBlur = 20;
-    ctx.shadowOffsetY = 8;
-    const ringGrad = ctx.createRadialGradient(0, 0, faceR, 0, 0, hubR);
-    ringGrad.addColorStop(0, '#8E5E12');
-    ringGrad.addColorStop(0.25, '#C98A1E');
-    ringGrad.addColorStop(0.6, '#E0A93A');
-    ringGrad.addColorStop(1, '#FFE27A');
+    // Drop shadow for lift
+    ctx.shadowColor = 'rgba(0,0,0,0.55)';
+    ctx.shadowBlur = 14;
+    ctx.shadowOffsetY = 6;
+
+    // Gold ring border
+    const ringGrad = ctx.createRadialGradient(-hubR * 0.3, -hubR * 0.3, hubR * 0.2, 0, 0, hubR);
+    ringGrad.addColorStop(0, '#FFE27A');
+    ringGrad.addColorStop(0.6, '#FFD700');
+    ringGrad.addColorStop(1, '#F57F17');
     ctx.fillStyle = ringGrad;
     ctx.beginPath();
     ctx.arc(0, 0, hubR, 0, Math.PI * 2);
@@ -263,55 +241,34 @@ class SpinWheel {
     ctx.shadowBlur = 0;
     ctx.shadowOffsetY = 0;
 
-    ctx.beginPath();
-    ctx.arc(0, 0, hubR - 0.5, 0, Math.PI * 2);
-    ctx.lineWidth = 1.5;
-    ctx.strokeStyle = 'rgba(255,255,255,0.5)';
-    ctx.stroke();
-
-    const notchCount = 14;
-    const notchR = hubR * 0.93;
-    const notchSize = hubR * 0.07;
-    for (let i = 0; i < notchCount; i++) {
-      const a = (i / notchCount) * Math.PI * 2;
-      const nx = Math.cos(a) * notchR;
-      const ny = Math.sin(a) * notchR;
-      ctx.beginPath();
-      ctx.arc(nx, ny, notchSize, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(255,250,220,0.9)';
-      ctx.fill();
-      ctx.lineWidth = 1;
-      ctx.strokeStyle = 'rgba(80,50,10,0.5)';
-      ctx.stroke();
-    }
-
-    ctx.beginPath();
-    ctx.arc(0, 0, faceR + 3, 0, Math.PI * 2);
-    ctx.lineWidth = 2.5;
-    ctx.strokeStyle = 'rgba(0,0,0,0.5)';
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.arc(0, 0, faceR + 1.5, 0, Math.PI * 2);
-    ctx.lineWidth = 1;
-    ctx.strokeStyle = 'rgba(255,255,255,0.25)';
-    ctx.stroke();
-
-    const faceGrad = ctx.createRadialGradient(-faceR * 0.35, -faceR * 0.35, faceR * 0.1, 0, 0, faceR);
-    faceGrad.addColorStop(0, this.hubColorLight);
-    faceGrad.addColorStop(1, this.hubColor);
+    // Dark navy/purple inner face
+    const faceGrad = ctx.createRadialGradient(-faceR * 0.3, -faceR * 0.3, faceR * 0.1, 0, 0, faceR);
+    faceGrad.addColorStop(0, '#4a2c7a');
+    faceGrad.addColorStop(1, '#1a0a2e');
     ctx.beginPath();
     ctx.arc(0, 0, faceR, 0, Math.PI * 2);
     ctx.fillStyle = faceGrad;
     ctx.fill();
 
+    // Gold star icon centered on the hub
+    ctx.fillStyle = '#FFD700';
+    ctx.strokeStyle = '#F57F17';
+    ctx.lineWidth = 1.5;
+    ctx.lineJoin = 'round';
+    const starR = faceR * 0.55;
+    const starInner = starR * 0.45;
     ctx.beginPath();
-    ctx.arc(-faceR * 0.25, -faceR * 0.3, faceR * 0.55, 0, Math.PI * 2);
-    const gloss = ctx.createRadialGradient(-faceR * 0.25, -faceR * 0.3, 0, -faceR * 0.25, -faceR * 0.3, faceR * 0.55);
-    gloss.addColorStop(0, 'rgba(255,255,255,0.5)');
-    gloss.addColorStop(1, 'rgba(255,255,255,0)');
-    ctx.fillStyle = gloss;
+    for (let i = 0; i < 10; i++) {
+      const a = (i / 10) * Math.PI * 2 - Math.PI / 2;
+      const rad = i % 2 === 0 ? starR : starInner;
+      const sx = Math.cos(a) * rad;
+      const sy = Math.sin(a) * rad;
+      if (i === 0) ctx.moveTo(sx, sy); else ctx.lineTo(sx, sy);
+    }
+    ctx.closePath();
     ctx.fill();
+    ctx.stroke();
+
     ctx.restore();
   }
 

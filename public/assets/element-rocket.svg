@@ -1,0 +1,20 @@
+<svg viewBox="0 0 160 220" xmlns="http://www.w3.org/2000/svg" role="img">
+<title>Rocket</title>
+<desc>Decorative pink and gold rocket with a flame trail</desc>
+<defs>
+<linearGradient id="rocketBodyGrad" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#FFFFFF"/>
+<stop offset="100%" stop-color="#F8BBD0"/>
+</linearGradient>
+<linearGradient id="rocketFlameGrad" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#FFD700"/>
+<stop offset="100%" stop-color="#FF6FA5"/>
+</linearGradient>
+</defs>
+<path d="M80,18 C110,50 116,110 108,150 L52,150 C44,110 50,50 80,18 Z" fill="url(#rocketBodyGrad)" stroke="#E91E8C" stroke-width="4"/>
+<path d="M52,120 L20,160 L48,150 Z" fill="#FFD700" stroke="#E65100" stroke-width="3"/>
+<path d="M108,120 L140,160 L112,150 Z" fill="#FFD700" stroke="#E65100" stroke-width="3"/>
+<circle cx="80" cy="80" r="22" fill="#4FC3F7" stroke="#0288D1" stroke-width="4"/>
+<circle cx="73" cy="73" r="6" fill="#FFFFFF" opacity="0.6"/>
+<path d="M60,150 Q80,200 65,214 Q80,200 80,150 Q80,200 95,214 Q80,200 100,150 Z" fill="url(#rocketFlameGrad)"/>
+</svg>
