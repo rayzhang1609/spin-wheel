@@ -158,6 +158,65 @@ body {
   position: relative;
   z-index: 1;
 }
+/* ===== Pedestal wrappers — positioning context for isometric faces ===== */
+.connector-wrap {
+  position: relative;
+  z-index: 2;            /* connector sits in front of the cabinet's receding top face */
+  display: flex;
+  justify-content: center;
+}
+.cabinet-wrap {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+}
+
+/* Isometric angled faces (parallelograms via clip-path). Back edge recedes
+   up-and-to-the-right, giving true perspective depth, not flat shading. */
+.connector-top-face,
+.cabinet-top-face,
+.cabinet-side-face {
+  position: absolute;
+  z-index: 0;            /* behind the front face (z-index:1) where they overlap */
+  pointer-events: none;
+}
+
+/* Pink connector — small receding top face */
+.connector-top-face {
+  --dx: 12px; --dy: 9px;
+  top: calc(-1 * var(--dy));
+  left: 0;
+  width: calc(100% + var(--dx));
+  height: var(--dy);
+  background: linear-gradient(180deg, #FFD0E4 0%, #FF9DC4 100%);
+  clip-path: polygon(0 100%, calc(100% - var(--dx)) 100%, 100% 0, var(--dx) 0);
+  border-top-left-radius: 7px;
+  border-top-right-radius: 9px;
+}
+
+/* Cabinet — receding top face (lighter, catches light) */
+.cabinet-top-face {
+  --dx: 16px; --dy: 12px;
+  top: calc(-1 * var(--dy));
+  left: 0;
+  width: calc(100% + var(--dx));
+  height: var(--dy);
+  background: linear-gradient(180deg, #A6DAFF 0%, #6FB2F2 100%);
+  clip-path: polygon(0 100%, calc(100% - var(--dx)) 100%, 100% 0, var(--dx) 0);
+}
+
+/* Cabinet — right side face (darker, recedes back) */
+.cabinet-side-face {
+  --dx: 16px; --dy: 12px;
+  top: calc(-1 * var(--dy));
+  left: 100%;
+  width: var(--dx);
+  height: calc(100% + var(--dy));
+  background: linear-gradient(180deg, #1565c0 0%, #0d3f8f 100%);
+  clip-path: polygon(0 var(--dy), 0 100%, var(--dx) calc(100% - var(--dy)), var(--dx) 0);
+}
+
 .pedestal-column {
   width: 80px;
   height: 50px;
@@ -170,12 +229,12 @@ body {
     inset -3px 0 6px rgba(0,0,0,0.35),
     0 6px 14px rgba(0,0,0,0.45);
   position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding-top: 4px;
-  z-index: 2;
 }
 .pedestal-base {
   width: 220px;
@@ -192,20 +251,10 @@ body {
   align-items: stretch;
   justify-content: flex-end;
   position: relative;
-  overflow: hidden;
+  z-index: 1;
+  overflow: visible;
   padding-bottom: 10px;
   margin-top: -6px;
-}
-/* Lighter horizontal "top face" lid strip — reads as the top surface of a 3D box */
-.pedestal-base::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 16px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.55), rgba(255,255,255,0.12) 70%, transparent);
-  border-bottom: 1px solid rgba(255,255,255,0.25);
-  pointer-events: none;
-  z-index: 1;
 }
 
 /* ===== Marquee bulb trim ===== */
@@ -551,6 +600,8 @@ body {
 
 .pedestal-column { width: 60px; height: 36px; }
 .pedestal-base { width: 180px; height: 74px; }
+.connector-top-face { --dx: 9px; --dy: 7px; }
+.cabinet-top-face, .cabinet-side-face { --dx: 12px; --dy: 9px; }
 .pedestal-orb { width: 16px; height: 16px; right: 8px; }
 .control-panel { gap: 12px; padding: 6px 8px 4px; margin: 0 6px 3px; }
 .joystick { width: 24px; height: 42px; }
