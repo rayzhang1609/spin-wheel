@@ -69,9 +69,9 @@ class SpinWheel {
     // Base shadow disk (violet bezel color, gives the whole wheel its drop shadow)
     ctx.save();
     ctx.translate(cx, cy);
-    ctx.shadowColor = 'rgba(0,0,0,0.6)';
-    ctx.shadowBlur = 30;
-    ctx.shadowOffsetY = 16;
+    ctx.shadowColor = 'rgba(0,0,0,0.65)';
+    ctx.shadowBlur = 48;
+    ctx.shadowOffsetY = 24;
     ctx.fillStyle = '#4a2c7a';
     ctx.beginPath();
     ctx.arc(0, 0, r, 0, Math.PI * 2);
@@ -176,42 +176,55 @@ class SpinWheel {
 
     ctx.restore(); // end rotating group
 
-    // ===== Violet bezel rim (stationary, no studs) =====
+    // ===== Violet bezel rim (stationary, 3D bevel) =====
     ctx.save();
     ctx.translate(cx, cy);
 
-    // Main bezel ring — radial gradient: highlight on top, shadow on bottom
+    // Main bezel ring — diagonal gradient: bright highlight top-left, deep shadow bottom-right
     ctx.beginPath();
     ctx.arc(0, 0, wedgeR + rimThickness * 0.5, 0, Math.PI * 2);
     ctx.lineWidth = rimThickness;
-    const rimGrad = ctx.createLinearGradient(0, -r, 0, r);
-    rimGrad.addColorStop(0, '#B388FF');
-    rimGrad.addColorStop(0.3, '#7B4FE0');
-    rimGrad.addColorStop(0.7, '#5C3A9E');
-    rimGrad.addColorStop(1, '#3D2466');
+    const rimGrad = ctx.createLinearGradient(-r * 0.7, -r * 0.7, r * 0.7, r * 0.7);
+    rimGrad.addColorStop(0, '#D1B3FF');
+    rimGrad.addColorStop(0.25, '#9574E8');
+    rimGrad.addColorStop(0.5, '#6A45C7');
+    rimGrad.addColorStop(0.75, '#4A2E8C');
+    rimGrad.addColorStop(1, '#2E1A5C');
     ctx.strokeStyle = rimGrad;
     ctx.stroke();
 
-    // Highlight arc along top-inner edge
+    // Bright highlight arc along top-left edge (light catches here)
     ctx.beginPath();
-    ctx.arc(0, 0, wedgeR + rimThickness * 0.25, -Math.PI * 0.8, -Math.PI * 0.2);
+    ctx.arc(0, 0, wedgeR + rimThickness * 0.25, -Math.PI * 0.95, -Math.PI * 0.55);
+    ctx.lineWidth = Math.max(2, rimThickness * 0.22);
+    ctx.strokeStyle = 'rgba(255,255,255,0.55)';
+    ctx.lineCap = 'round';
+    ctx.stroke();
+
+    // Deep shadow arc along bottom-right edge
+    ctx.beginPath();
+    ctx.arc(0, 0, r - 1, Math.PI * 0.1, Math.PI * 0.65);
     ctx.lineWidth = Math.max(2, rimThickness * 0.2);
-    ctx.strokeStyle = 'rgba(255,255,255,0.35)';
+    ctx.strokeStyle = 'rgba(0,0,0,0.5)';
+    ctx.lineCap = 'round';
     ctx.stroke();
+    ctx.lineCap = 'butt';
 
-    // Shadow line along bottom-outer edge
-    ctx.beginPath();
-    ctx.arc(0, 0, r - 1, Math.PI * 0.15, Math.PI * 0.85);
-    ctx.lineWidth = Math.max(2, rimThickness * 0.15);
-    ctx.strokeStyle = 'rgba(0,0,0,0.4)';
-    ctx.stroke();
-
-    // Dark separator between rim and wedges
+    // Inner bezel: thin dark ring where rim meets wedge face (rim sits proud of wedge surface)
     ctx.beginPath();
     ctx.arc(0, 0, wedgeR, 0, Math.PI * 2);
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = 'rgba(0,0,0,0.5)';
+    ctx.lineWidth = Math.max(3, rimThickness * 0.18);
+    ctx.strokeStyle = 'rgba(10,5,24,0.75)';
     ctx.stroke();
+
+    // Faint inner highlight just inside the bezel, top-left (catches light on the recessed lip)
+    ctx.beginPath();
+    ctx.arc(0, 0, wedgeR - Math.max(2, rimThickness * 0.1), -Math.PI * 0.9, -Math.PI * 0.6);
+    ctx.lineWidth = Math.max(1.5, rimThickness * 0.1);
+    ctx.strokeStyle = 'rgba(255,255,255,0.25)';
+    ctx.lineCap = 'round';
+    ctx.stroke();
+    ctx.lineCap = 'butt';
 
     ctx.restore();
 

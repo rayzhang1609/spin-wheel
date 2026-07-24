@@ -38,16 +38,32 @@ body {
 .bokeh-orb {
   position: absolute;
   border-radius: 50%;
-  filter: blur(40px);
-  opacity: 0.2;
+  filter: blur(34px);
+  opacity: 0.15;
   animation: lightFlash var(--flash-dur, 3s) ease-in-out infinite;
 }
 
 @keyframes lightFlash {
-  0%   { opacity: 0.05; transform: scale(0.95); }
-  45%  { opacity: 0.6;  transform: scale(1.05); }
-  55%  { opacity: 0.6;  transform: scale(1.05); }
-  100% { opacity: 0.05; transform: scale(0.95); }
+  0%   { opacity: 0.04; transform: scale(0.92); }
+  45%  { opacity: 0.55; transform: scale(1.06); }
+  55%  { opacity: 0.55; transform: scale(1.06); }
+  100% { opacity: 0.04; transform: scale(0.92); }
+}
+
+/* ===== Type B — steady bright sparkle points (always-on, subtle twinkle) ===== */
+.sparkle-point {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  box-shadow: 0 0 4px 1px currentColor, 0 0 1px rgba(255,255,255,0.9) inset;
+  opacity: 0.85;
+  animation: sparkleTwinkle var(--twinkle-dur, 3.4s) ease-in-out infinite;
+}
+
+@keyframes sparkleTwinkle {
+  0%   { opacity: 0.65; transform: scale(0.85); }
+  50%  { opacity: 1;    transform: scale(1.1); }
+  100% { opacity: 0.65; transform: scale(0.85); }
 }
 
 /* ===== Vignette (keep from prior, restyle for violet) ===== */
@@ -67,34 +83,12 @@ body {
   right: 0;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   padding: 12px 16px;
   z-index: 50;
   pointer-events: none;
 }
 .top-bar > * { pointer-events: auto; }
-
-.top-icon-btn {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  background: var(--arcade-icon-bg);
-  border: 2px solid var(--arcade-icon-border);
-  color: #e8eaf6;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: transform 0.15s, border-color 0.15s;
-  backdrop-filter: blur(8px);
-}
-.top-icon-btn:hover {
-  transform: scale(1.08);
-  border-color: rgba(255,255,255,0.8);
-}
-.top-icon-btn:active {
-  transform: scale(0.93);
-}
 
 .top-currency {
   display: flex;
@@ -167,26 +161,32 @@ body {
 .pedestal-column {
   width: 80px;
   height: 50px;
-  background: linear-gradient(180deg, var(--arcade-pink), #c2185b);
+  background: linear-gradient(180deg, #FF6FAE 0%, var(--arcade-pink) 45%, #c2185b 100%);
   border-radius: 8px 8px 4px 4px;
-  border: 2px solid rgba(0,0,0,0.3);
-  border-top: none;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  border: 2px solid rgba(0,0,0,0.35);
+  border-top: 1px solid rgba(255,255,255,0.4);
+  box-shadow:
+    inset 2px 0 4px rgba(255,255,255,0.25),
+    inset -3px 0 6px rgba(0,0,0,0.35),
+    0 6px 14px rgba(0,0,0,0.45);
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding-top: 4px;
+  z-index: 2;
 }
 .pedestal-base {
   width: 220px;
   height: 96px;
-  background: linear-gradient(180deg, var(--arcade-blue), #1565c0);
+  background: linear-gradient(180deg, #5BA8F0 0%, var(--arcade-blue) 40%, #1565c0 100%);
   border-radius: 10px;
-  border: 3px solid rgba(0,0,0,0.35);
-  border-top: 2px solid rgba(255,255,255,0.25);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+  border: 3px solid rgba(8,20,50,0.55);
+  box-shadow:
+    inset 0 2px 0 rgba(255,255,255,0.35),
+    inset 0 -6px 10px rgba(0,0,0,0.4),
+    0 10px 24px rgba(0,0,0,0.5);
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -194,6 +194,18 @@ body {
   position: relative;
   overflow: hidden;
   padding-bottom: 10px;
+  margin-top: -6px;
+}
+/* Lighter horizontal "top face" lid strip — reads as the top surface of a 3D box */
+.pedestal-base::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 16px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.55), rgba(255,255,255,0.12) 70%, transparent);
+  border-bottom: 1px solid rgba(255,255,255,0.25);
+  pointer-events: none;
+  z-index: 1;
 }
 
 /* ===== Marquee bulb trim ===== */
@@ -201,6 +213,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-evenly;
+  position: relative;
+  z-index: 2;
 }
 .marquee-row-base {
   height: 14px;
@@ -218,27 +232,52 @@ body {
   width: 8px;
   height: 8px;
   border-radius: 50%;
+  position: relative;
   box-shadow: 0 0 6px 1px currentColor, 0 0 2px rgba(255,255,255,0.6) inset;
   opacity: 0.25;
   animation: marqueeFlash var(--flash-dur, 2.6s) ease-in-out infinite;
 }
+/* Soft blurred glow halo behind each solid bulb */
+.marquee-bulb::before {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 20px; height: 20px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, currentColor 0%, transparent 65%);
+  filter: blur(3px);
+  opacity: 0.5;
+  pointer-events: none;
+  animation: inherit;
+}
 .marquee-row-column .marquee-bulb { width: 6px; height: 6px; }
+.marquee-row-column .marquee-bulb::before { width: 14px; height: 14px; }
 
 @keyframes marqueeFlash {
   0%   { opacity: 0.2; box-shadow: 0 0 3px 0 currentColor; }
-  45%  { opacity: 1;   box-shadow: 0 0 10px 2px currentColor, 0 0 3px rgba(255,255,255,0.8) inset; }
-  55%  { opacity: 1;   box-shadow: 0 0 10px 2px currentColor, 0 0 3px rgba(255,255,255,0.8) inset; }
+  45%  { opacity: 1;   box-shadow: 0 0 12px 3px currentColor, 0 0 4px rgba(255,255,255,0.9) inset; }
+  55%  { opacity: 1;   box-shadow: 0 0 12px 3px currentColor, 0 0 4px rgba(255,255,255,0.9) inset; }
   100% { opacity: 0.2; box-shadow: 0 0 3px 0 currentColor; }
 }
 
-/* ===== Claw-machine control panel ===== */
+/* ===== Claw-machine control panel (recessed into the cabinet) ===== */
 .control-panel {
   display: flex;
   align-items: flex-end;
   justify-content: center;
   gap: 18px;
-  padding: 6px 10px 2px;
+  padding: 8px 10px 6px;
   flex: 1 1 auto;
+  position: relative;
+  z-index: 2;
+  margin: 0 10px 4px;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #2c4a7a 0%, #1f3a66 100%);
+  border: 1px solid rgba(0,0,0,0.45);
+  box-shadow:
+    inset 0 4px 8px rgba(0,0,0,0.6),
+    inset 0 -1px 2px rgba(255,255,255,0.08);
 }
 
 /* Joystick */
@@ -250,14 +289,18 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
+  filter: drop-shadow(0 4px 4px rgba(0,0,0,0.55));
 }
 .joystick-base {
   width: 26px;
   height: 26px;
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #3a3f52, #1a1d2b);
-  border: 2px solid rgba(0,0,0,0.5);
-  box-shadow: 0 3px 6px rgba(0,0,0,0.5), inset 0 2px 3px rgba(255,255,255,0.12);
+  background: radial-gradient(circle at 35% 32%, #525876 0%, #2a2e44 55%, #14162a 100%);
+  border: 2px solid rgba(0,0,0,0.6);
+  box-shadow:
+    0 4px 7px rgba(0,0,0,0.6),
+    inset 0 2px 3px rgba(255,255,255,0.22),
+    inset 0 -3px 4px rgba(0,0,0,0.5);
   z-index: 2;
 }
 .joystick-stick {
@@ -267,8 +310,9 @@ body {
   transform: translateX(-50%);
   width: 6px;
   height: 24px;
-  background: linear-gradient(90deg, #2a2d3d, #454a63, #2a2d3d);
+  background: linear-gradient(90deg, #232636 0%, #4a5070 45%, #5a6184 55%, #232636 100%);
   border-radius: 3px;
+  box-shadow: 0 2px 3px rgba(0,0,0,0.5);
   z-index: 1;
 }
 .joystick-ball {
@@ -279,9 +323,13 @@ body {
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #FFE27A, var(--arcade-gold), var(--arcade-gold-dark));
-  border: 2px solid rgba(0,0,0,0.4);
-  box-shadow: 0 3px 6px rgba(0,0,0,0.5), inset 0 -2px 3px rgba(0,0,0,0.25);
+  background:
+    radial-gradient(circle at 32% 28%, #FFF6C8 0%, #FFE27A 25%, var(--arcade-gold) 60%, var(--arcade-gold-dark) 100%);
+  border: 1.5px solid rgba(60,30,0,0.5);
+  box-shadow:
+    0 4px 7px rgba(0,0,0,0.6),
+    inset -3px -3px 4px rgba(0,0,0,0.35),
+    inset 2px 2px 3px rgba(255,255,255,0.4);
   z-index: 3;
 }
 
@@ -290,24 +338,28 @@ body {
   display: flex;
   align-items: flex-end;
   gap: 8px;
+  filter: drop-shadow(0 3px 3px rgba(0,0,0,0.55));
 }
 .arcade-btn {
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  border: 2px solid rgba(0,0,0,0.45);
-  box-shadow: 0 3px 5px rgba(0,0,0,0.5), inset 0 -3px 4px rgba(0,0,0,0.35);
+  border: 2px solid rgba(0,0,0,0.55);
+  box-shadow:
+    0 4px 6px rgba(0,0,0,0.6),
+    inset 0 -4px 5px rgba(0,0,0,0.4),
+    inset 0 2px 3px rgba(255,255,255,0.45);
   cursor: default;
   padding: 0;
 }
 .arcade-btn-gold {
-  background: radial-gradient(circle at 35% 30%, #FFF3B0, var(--arcade-gold), var(--arcade-gold-dark));
+  background: radial-gradient(circle at 32% 28%, #FFF6C8, var(--arcade-gold) 55%, var(--arcade-gold-dark) 100%);
 }
 .arcade-btn-magenta {
-  background: radial-gradient(circle at 35% 30%, #FF9DD0, var(--arcade-pink), #ad1457);
+  background: radial-gradient(circle at 32% 28%, #FFC8E2, var(--arcade-pink) 55%, #ad1457 100%);
 }
 .arcade-btn-blue {
-  background: radial-gradient(circle at 35% 30%, #B3D9FF, var(--arcade-blue), #0d47a1);
+  background: radial-gradient(circle at 32% 28%, #D6ECFF, var(--arcade-blue) 55%, #0d47a1 100%);
 }
 
 .pedestal-orb {
@@ -500,7 +552,7 @@ body {
 .pedestal-column { width: 60px; height: 36px; }
 .pedestal-base { width: 180px; height: 74px; }
 .pedestal-orb { width: 16px; height: 16px; right: 8px; }
-.control-panel { gap: 12px; padding: 4px 8px 2px; }
+.control-panel { gap: 12px; padding: 6px 8px 4px; margin: 0 6px 3px; }
 .joystick { width: 24px; height: 42px; }
 .joystick-base { width: 20px; height: 20px; }
 .joystick-stick { height: 18px; bottom: 14px; }
@@ -509,7 +561,6 @@ body {
 .arcade-buttons { gap: 6px; }
 .marquee-bulb { width: 6px; height: 6px; }
 
-.top-icon-btn { width: 38px; height: 38px; }
 .top-currency { padding: 6px 14px; }
 .currency-num { font-size: 0.95rem; }
 .currency-coin { font-size: 0.95rem; }
@@ -537,7 +588,6 @@ body {
   .wheel-glow,
   .spin-btn,
   .title-banner,
-  .top-icon-btn,
   .ctrl-btn,
   .reset-btn,
   .knockout-restart {
@@ -545,7 +595,8 @@ body {
     transition: none !important;
   }
   .bokeh-orb,
-  .marquee-bulb {
+  .marquee-bulb,
+  .sparkle-point {
     animation: none !important;
     opacity: 0.6 !important;
   }
