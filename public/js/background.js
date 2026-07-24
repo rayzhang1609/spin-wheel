@@ -1,18 +1,18 @@
-// Shared background layer initializer — two light types on an evenly-spaced grid:
-//  Type A: soft fading bokeh circles (opacity fades in/out on staggered loops)
-//  Type B: small, sharp, bright sparkle points (always-on, subtle twinkle, no fade-to-zero)
-// Lights are laid out on a uniform row/column grid (with small organic jitter)
-// so the field reads as a structured marquee wall matching the portrait screen,
-// not a random scatter.
+// Shared background layer initializer — background lights on an evenly-spaced grid
+// plus permanent bright side lights on the left and right edges.
+//  Type A: visible glowing circles on a grid (fade in/out, staggered)
+//  Type B: small steady sparkle points mixed into the grid (always-on twinkle)
+//  Side lights: permanently bright points on far left/right edges (no fade)
+// The grid forms a visible vertical rectangle behind the machine.
 (function () {
   const reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const BOKEH_COLORS = [
-    'rgba(123,79,224,0.75)',   // purple
-    'rgba(233,30,140,0.65)',   // pink
-    'rgba(66,165,245,0.6)',    // blue
-    'rgba(179,136,255,0.65)',  // light purple
-    'rgba(255,107,157,0.6)'    // light pink
+    'rgba(123,79,224,0.8)',   // purple
+    'rgba(233,30,140,0.7)',   // pink
+    'rgba(66,165,245,0.7)',   // blue
+    'rgba(179,136,255,0.7)',  // light purple
+    'rgba(255,107,157,0.65)'  // light pink
   ];
 
   const SPARKLE_COLORS = [
@@ -21,6 +21,13 @@
     '#42A5F5', // blue
     '#B388FF', // light purple
     '#FFFFFF'  // white hot
+  ];
+
+  const SIDE_COLORS = [
+    '#FFD700', // gold
+    '#E91E8C', // magenta
+    '#42A5F5', // blue
+    '#B388FF', // light purple
   ];
 
   const MARQUEE_COLORS = [
@@ -36,15 +43,15 @@
   const ROWS = 9;
   const INSET_X = 6;   // % inset from left/right
   const INSET_Y = 4;   // % inset from top/bottom
-  const JITTER = 12;   // px jitter around each grid point (organic, not robotic)
+  const JITTER = 10;   // px jitter around each grid point (organic, not robotic)
   const stepX = (100 - INSET_X * 2) / (COLS - 1);
   const stepY = (100 - INSET_Y * 2) / (ROWS - 1);
 
-  // Type A — soft fading bokeh circle
+  // Type A — visible glowing circle (fades in/out)
   function makeBokeh(container, leftPct, topPct) {
     const orb = document.createElement('div');
     orb.className = 'bokeh-orb';
-    const size = rand(28, 115);
+    const size = rand(40, 90);
     orb.style.width = size + 'px';
     orb.style.height = size + 'px';
     orb.style.left = leftPct + '%';
@@ -52,22 +59,22 @@
     orb.style.marginLeft = rand(-JITTER, JITTER) + 'px';
     orb.style.marginTop = rand(-JITTER, JITTER) + 'px';
     const color = BOKEH_COLORS[Math.floor(Math.random() * BOKEH_COLORS.length)];
-    orb.style.background = 'radial-gradient(circle, ' + color + ' 0%, transparent 70%)';
+    orb.style.background = 'radial-gradient(circle, ' + color + ' 0%, transparent 65%)';
     if (!reducedMotion) {
       orb.style.animationDelay = (Math.random() * 4) + 's';
       orb.style.animationDuration = rand(2.5, 4) + 's';
     } else {
       orb.style.animation = 'none';
-      orb.style.opacity = '0.6';
+      orb.style.opacity = '0.5';
     }
     container.appendChild(orb);
   }
 
-  // Type B — steady bright sparkle point
+  // Type B — steady bright sparkle point (twinkle, no fade-to-zero)
   function makeSparkle(container, leftPct, topPct) {
     const dot = document.createElement('span');
     dot.className = 'sparkle-point';
-    const size = rand(3, 7);
+    const size = rand(4, 8);
     dot.style.width = size + 'px';
     dot.style.height = size + 'px';
     dot.style.left = leftPct + '%';
@@ -87,9 +94,8 @@
     container.appendChild(dot);
   }
 
-  // Build the grid: one light per grid point. Type B (sparkle) placed at every
-  // 3rd point on a diagonal pattern ((r+c) % 3 === 0) so steady points are
-  // evenly mixed among the fading circles; the rest are Type A bokeh.
+  // Build the grid: one light per grid point. Type B (sparkle) at every
+  // 3rd point on a diagonal pattern; the rest are Type A bokeh.
   function createGridLights() {
     const container = document.getElementById('bokehLayer');
     if (!container) return;
@@ -101,6 +107,43 @@
         if (isSparkle) makeSparkle(container, leftPct, topPct);
         else makeBokeh(container, leftPct, topPct);
       }
+    }
+  }
+
+  // Permanent side lights — always-bright points on far left and right edges,
+  // scattered vertically. These stay lit regardless of the fade animation.
+  function createSideLights() {
+    const container = document.getElementById('bokehLayer');
+    if (!container) return;
+    const count = 10; // per side
+    for (let i = 0; i < count; i++) {
+      const topPct = 4 + (i / (count - 1)) * 92; // spread top to bottom
+      // Left edge
+      const leftLight = document.createElement('span');
+      leftLight.className = 'side-light';
+      const lSize = rand(5, 9);
+      leftLight.style.width = lSize + 'px';
+      leftLight.style.height = lSize + 'px';
+      leftLight.style.left = '1.5%';
+      leftLight.style.top = topPct + '%';
+      leftLight.style.marginTop = rand(-8, 8) + 'px';
+      const lColor = SIDE_COLORS[i % SIDE_COLORS.length];
+      leftLight.style.color = lColor;
+      leftLight.style.background = 'radial-gradient(circle, #ffffff 0%, ' + lColor + ' 50%, ' + lColor + ' 100%)';
+      container.appendChild(leftLight);
+      // Right edge
+      const rightLight = document.createElement('span');
+      rightLight.className = 'side-light';
+      const rSize = rand(5, 9);
+      rightLight.style.width = rSize + 'px';
+      rightLight.style.height = rSize + 'px';
+      rightLight.style.left = '98.5%';
+      rightLight.style.top = topPct + '%';
+      rightLight.style.marginTop = rand(-8, 8) + 'px';
+      const rColor = SIDE_COLORS[(i + 2) % SIDE_COLORS.length];
+      rightLight.style.color = rColor;
+      rightLight.style.background = 'radial-gradient(circle, #ffffff 0%, ' + rColor + ' 50%, ' + rColor + ' 100%)';
+      container.appendChild(rightLight);
     }
   }
 
@@ -130,6 +173,7 @@
 
   function init() {
     createGridLights();
+    createSideLights();
     createMarqueeBulbs();
   }
 

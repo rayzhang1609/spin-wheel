@@ -38,16 +38,25 @@ body {
 .bokeh-orb {
   position: absolute;
   border-radius: 50%;
-  filter: blur(34px);
-  opacity: 0.15;
+  filter: blur(18px);
+  opacity: 0.2;
   animation: lightFlash var(--flash-dur, 3s) ease-in-out infinite;
 }
 
 @keyframes lightFlash {
-  0%   { opacity: 0.04; transform: scale(0.92); }
-  45%  { opacity: 0.55; transform: scale(1.06); }
-  55%  { opacity: 0.55; transform: scale(1.06); }
-  100% { opacity: 0.04; transform: scale(0.92); }
+  0%   { opacity: 0.08; transform: scale(0.92); }
+  45%  { opacity: 0.6;  transform: scale(1.06); }
+  55%  { opacity: 0.6;  transform: scale(1.06); }
+  100% { opacity: 0.08; transform: scale(0.92); }
+}
+
+/* ===== Permanent side lights — always bright, no fade ===== */
+.side-light {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0.9;
+  box-shadow: 0 0 8px 2px currentColor, 0 0 2px rgba(255,255,255,0.9) inset;
 }
 
 /* ===== Type B — steady bright sparkle points (always-on, subtle twinkle) ===== */
@@ -172,49 +181,44 @@ body {
   justify-content: center;
 }
 
-/* Isometric angled faces (parallelograms via clip-path). Back edge recedes
-   up-and-to-the-right, giving true perspective depth, not flat shading. */
+/* Isometric angled faces — top face is a centered trapezoid that recedes
+   upward/backward (looking slightly down at a box), not right-projecting.
+   Side faces are subtle and symmetric to reinforce rearward depth. */
 .connector-top-face,
 .cabinet-top-face,
 .cabinet-side-face {
   position: absolute;
-  z-index: 0;            /* behind the front face (z-index:1) where they overlap */
+  z-index: 0;
   pointer-events: none;
 }
 
-/* Pink connector — small receding top face */
+/* Pink connector — small receding top face (centered trapezoid) */
 .connector-top-face {
-  --dx: 12px; --dy: 9px;
-  top: calc(-1 * var(--dy));
+  --depth: 9px; --inset: 7px;
+  top: calc(-1 * var(--depth));
   left: 0;
-  width: calc(100% + var(--dx));
-  height: var(--dy);
+  width: 100%;
+  height: var(--depth);
   background: linear-gradient(180deg, #FFD0E4 0%, #FF9DC4 100%);
-  clip-path: polygon(0 100%, calc(100% - var(--dx)) 100%, 100% 0, var(--dx) 0);
-  border-top-left-radius: 7px;
-  border-top-right-radius: 9px;
+  clip-path: polygon(0 100%, 100% 100%, calc(100% - var(--inset)) 0, var(--inset) 0);
 }
 
-/* Cabinet — receding top face (lighter, catches light) */
+/* Cabinet — receding top face (centered trapezoid, lighter = catches light) */
 .cabinet-top-face {
-  --dx: 16px; --dy: 12px;
-  top: calc(-1 * var(--dy));
+  --depth: 14px; --inset: 12px;
+  top: calc(-1 * var(--depth));
   left: 0;
-  width: calc(100% + var(--dx));
-  height: var(--dy);
-  background: linear-gradient(180deg, #A6DAFF 0%, #6FB2F2 100%);
-  clip-path: polygon(0 100%, calc(100% - var(--dx)) 100%, 100% 0, var(--dx) 0);
+  width: 100%;
+  height: var(--depth);
+  background: linear-gradient(180deg, #C8E8FF 0%, #7AB8F4 100%);
+  clip-path: polygon(0 100%, 100% 100%, calc(100% - var(--inset)) 0, var(--inset) 0);
+  box-shadow: 0 -1px 2px rgba(255,255,255,0.3);
 }
 
-/* Cabinet — right side face (darker, recedes back) */
+/* Cabinet — side face hidden; the centered top-face trapezoid alone
+   conveys the receding-backward depth without a rightward projection. */
 .cabinet-side-face {
-  --dx: 16px; --dy: 12px;
-  top: calc(-1 * var(--dy));
-  left: 100%;
-  width: var(--dx);
-  height: calc(100% + var(--dy));
-  background: linear-gradient(180deg, #1565c0 0%, #0d3f8f 100%);
-  clip-path: polygon(0 var(--dy), 0 100%, var(--dx) calc(100% - var(--dy)), var(--dx) 0);
+  display: none;
 }
 
 .pedestal-column {
@@ -245,7 +249,8 @@ body {
   box-shadow:
     inset 0 2px 0 rgba(255,255,255,0.35),
     inset 0 -6px 10px rgba(0,0,0,0.4),
-    0 10px 24px rgba(0,0,0,0.5);
+    0 12px 28px rgba(0,0,0,0.55),
+    0 4px 8px rgba(0,0,0,0.3);
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -600,8 +605,8 @@ body {
 
 .pedestal-column { width: 60px; height: 36px; }
 .pedestal-base { width: 180px; height: 74px; }
-.connector-top-face { --dx: 9px; --dy: 7px; }
-.cabinet-top-face, .cabinet-side-face { --dx: 12px; --dy: 9px; }
+.connector-top-face { --depth: 7px; --inset: 5px; }
+.cabinet-top-face, .cabinet-side-face { --depth: 10px; --inset: 9px; }
 .pedestal-orb { width: 16px; height: 16px; right: 8px; }
 .control-panel { gap: 12px; padding: 6px 8px 4px; margin: 0 6px 3px; }
 .joystick { width: 24px; height: 42px; }
