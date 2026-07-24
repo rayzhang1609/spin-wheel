@@ -39,11 +39,12 @@
   function rand(min, max) { return min + Math.random() * (max - min); }
 
   // Grid geometry — evenly spaced rows/cols across a portrait-ish inset area.
-  const COLS = 6;
-  const ROWS = 9;
-  const INSET_X = 6;   // % inset from left/right
-  const INSET_Y = 4;   // % inset from top/bottom
-  const JITTER = 10;   // px jitter around each grid point (organic, not robotic)
+  // Denser grid: more lights, closer spacing, fewer empty gaps.
+  const COLS = 8;
+  const ROWS = 12;
+  const INSET_X = 4;   // % inset from left/right
+  const INSET_Y = 3;   // % inset from top/bottom
+  const JITTER = 8;    // px jitter around each grid point (organic, not robotic)
   const stepX = (100 - INSET_X * 2) / (COLS - 1);
   const stepY = (100 - INSET_Y * 2) / (ROWS - 1);
 
