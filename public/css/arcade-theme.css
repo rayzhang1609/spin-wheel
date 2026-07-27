@@ -626,14 +626,16 @@ body {
 /* Phones need enough luminance for the fading orbs to survive the dark theme. */
 @media (max-width: 560px) {
   .bokeh-orb {
-    filter: blur(6px);
+    /* Bright, clearly visible red/blue bokeh flashes on dark phone screens. */
+    filter: blur(4px) saturate(1.8) brightness(1.8);
+    mix-blend-mode: screen;
     animation-name: mobileLightFlash !important;
   }
 }
 
 @keyframes mobileLightFlash {
-  0%, 100% { opacity: 0.24; transform: scale(0.94); }
-  45%, 55% { opacity: 0.78; transform: scale(1.08); }
+  0%, 100% { opacity: 0.38; transform: scale(0.94); }
+  45%, 55% { opacity: 0.95; transform: scale(1.1); }
 }
 
 .wheel-area {
