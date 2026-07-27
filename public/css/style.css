@@ -39,6 +39,10 @@ body {
   color: var(--text-light);
 }
 
+html {
+  overflow-x: clip;
+}
+
 /* Stars */
 .stars {
   position: fixed;

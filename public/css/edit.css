@@ -230,6 +230,19 @@
 
 .editor-item .item-emoji { max-width: 60px; text-align: center; }
 
+.prioritized-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #cbd5e1;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.prioritized-toggle input { accent-color: #a855f7; }
+
 .move-btn {
   width: 26px;
   height: 26px;
@@ -366,4 +379,6 @@
   .edit-header { flex-direction: column; gap: 12px; align-items: flex-start; }
   .add-row { flex-direction: column; align-items: stretch; }
   .editor-color, .editor-input.small { align-self: stretch; }
+  .editor-item { flex-wrap: wrap; }
+  .prioritized-toggle { margin-left: 30px; }
 }

@@ -129,6 +129,10 @@ function renderEditorItems() {
       <input type="color" value="${item.color}" data-idx="${i}" class="item-color" title="Color">
       <input type="text" value="${escapeHtml(item.label)}" data-idx="${i}" class="item-label" placeholder="Label">
       <input type="text" value="${escapeHtml(item.emoji || '')}" data-idx="${i}" class="item-emoji" placeholder="Icon" maxlength="4">
+      <label class="prioritized-toggle" title="When a peg stops beside this wedge, it rebounds onto this wedge.">
+        <input type="checkbox" data-idx="${i}" class="item-prioritized" ${item.prioritized ? 'checked' : ''}>
+        <span>Prioritized</span>
+      </label>
       <button class="move-btn" data-idx="${i}" data-dir="up" title="Move up">&#9650;</button>
       <button class="move-btn" data-idx="${i}" data-dir="down" title="Move down">&#9660;</button>
       <button class="del-btn" data-idx="${i}" title="Delete">&times;</button>
@@ -172,6 +176,9 @@ editorItems.addEventListener('change', async (e) => {
   } else if (t.classList.contains('item-color')) {
     data[activeKey].items[idx].color = t.value;
     await saveActive();
+  } else if (t.classList.contains('item-prioritized')) {
+    data[activeKey].items[idx].prioritized = t.checked;
+    await saveActive();
   }
 });
 
@@ -202,7 +209,7 @@ addItemBtn.addEventListener('click', async () => {
   const color = document.getElementById('newColor').value;
   const emoji = document.getElementById('newEmoji').value.trim();
   if (!label) return;
-  data[activeKey].items.push({ label, color, emoji });
+  data[activeKey].items.push({ label, color, emoji, prioritized: false });
   await saveActive();
   renderEditorItems();
   document.getElementById('newLabel').value = '';

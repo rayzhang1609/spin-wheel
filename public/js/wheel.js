@@ -384,12 +384,26 @@ class SpinWheel {
     this.ensureAudio();
 
     // --- Pre-select the winning slice (fair, uniform). ---
-    const targetIndex = Math.floor(Math.random() * n);
+    let targetIndex = Math.floor(Math.random() * n);
 
     // --- Decide whether the pointer ends ON A PEG or BETWEEN PEGS.
     //     ~25% on a peg (triggers rebound), ~75% between pegs (just stops).
     //     This makes it clearly random — most spins don't land on a peg. ---
     const landsOnPeg = Math.random() < 0.25;
+    let pegReboundDirection = 1; // Forward remains the default for ordinary wedges.
+
+    if (landsOnPeg) {
+      const previousIndex = (targetIndex - 1 + n) % n;
+      if (this.items[targetIndex].prioritized) {
+        // A backward rebound from this wedge's leading peg lands on it.
+        pegReboundDirection = -1;
+      } else if (this.items[previousIndex].prioritized) {
+        // Stop on the prioritized wedge's leading peg so backward rebound
+        // physically lands on that prioritized wedge.
+        targetIndex = previousIndex;
+        pegReboundDirection = -1;
+      }
+    }
 
     // --- Compute the exact final rotation that lands the pointer inside
     //     the winning slice (targetIndex).
@@ -456,7 +470,7 @@ class SpinWheel {
         this.spinPhase = 'SETTLE';
         if (landsOnPeg) {
           // Pointer is exactly on a peg → rebound action.
-          this.runSettleEmbellishment(finalRotation, sliceAngle, now);
+          this.runSettleEmbellishment(finalRotation, sliceAngle, now, pegReboundDirection);
         } else {
           // Pointer is between pegs → just stop, no rebound.
           this.runSoftSettle(targetIndex, now);
@@ -479,8 +493,7 @@ class SpinWheel {
   // the rebounded position (does NOT return to the peg). The winner is
   // determined by where the pointer actually ends up. Guaranteed to
   // terminate (no loops). =====
-  runSettleEmbellishment(finalRot, sliceAngle, now) {
-    const direction = Math.random() < 0.5 ? 1 : -1; // 1=forward, -1=backward
+  runSettleEmbellishment(finalRot, sliceAngle, now, direction = 1) {
     const reboundAmt = sliceAngle * (0.18 + Math.random() * 0.10); // 18-28% of a slice
     const reboundTo = finalRot + direction * reboundAmt;
 

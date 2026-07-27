@@ -29,10 +29,14 @@ body {
 /* ===== Bokeh light orbs layer ===== */
 .bokeh-layer {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100dvh;
   pointer-events: none;
   z-index: 0;
-  overflow: hidden;
+  overflow: clip;
+  contain: paint;
 }
 
 .bokeh-orb {
@@ -602,6 +606,20 @@ body {
   filter: blur(10px);
   animation: lightFlash var(--flash-dur, 3s) ease-in-out infinite !important;
   will-change: opacity, transform;
+}
+
+/* Fixed surfaces use the visual viewport, not the page's overflow width. */
+.result-banner {
+  inset: auto;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100dvh;
+}
+
+.won-popup {
+  top: 50dvh;
+  left: 50vw;
 }
 
 .wheel-area {
