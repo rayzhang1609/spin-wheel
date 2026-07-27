@@ -34,7 +34,8 @@ body {
   width: 100vw;
   height: 100dvh;
   pointer-events: none;
-  z-index: 0;
+  /* Above the dark vignette, but behind the game content (also z-index: 1). */
+  z-index: 1;
   overflow: clip;
   contain: paint;
 }
@@ -620,6 +621,19 @@ body {
 .won-popup {
   top: 50dvh;
   left: 50vw;
+}
+
+/* Phones need enough luminance for the fading orbs to survive the dark theme. */
+@media (max-width: 560px) {
+  .bokeh-orb {
+    filter: blur(6px);
+    animation-name: mobileLightFlash !important;
+  }
+}
+
+@keyframes mobileLightFlash {
+  0%, 100% { opacity: 0.24; transform: scale(0.94); }
+  45%, 55% { opacity: 0.78; transform: scale(1.08); }
 }
 
 .wheel-area {
