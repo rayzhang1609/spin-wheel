@@ -174,6 +174,72 @@ class SpinWheel {
       ctx.restore();
     });
 
+    // ===== Pegs at wedge boundaries (rotate WITH the wheel) =====
+    // One protruding peg per wedge boundary, at angle i*sliceAngle - π/2.
+    // This is the exact same source of truth the click/rebound logic uses
+    // (detectPegCrossing fires when rotation crosses a multiple of
+    // sliceAngle, which maps to these boundary angles). Pegs are drawn
+    // inside the rotating group so they stay locked to their boundaries.
+    const pegLen = rimThickness * 1.35;   // protrudes past the outer rim
+    const pegR   = Math.max(2, rimThickness * 0.16); // shaft half-width
+    const tipR   = Math.max(3, rimThickness * 0.24); // gold bead radius
+
+    for (let i = 0; i < n; i++) {
+      const a = i * sliceAngle - Math.PI / 2;
+      ctx.save();
+      ctx.rotate(a);
+      // +x axis now points radially outward at this boundary angle.
+
+      // Subtle drop shadow so the peg reads as protruding physically.
+      ctx.shadowColor = 'rgba(0,0,0,0.4)';
+      ctx.shadowBlur = 4;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 2;
+
+      // --- Shaft: lavender/purple cylinder matching the rim's palette ---
+      const shaftEnd = r + pegLen - tipR * 0.4;
+      const shaftGrad = ctx.createLinearGradient(0, -pegR, 0, pegR);
+      shaftGrad.addColorStop(0, '#D1B3FF');   // light highlight (top side)
+      shaftGrad.addColorStop(0.45, '#9574E8'); // mid purple (matches rim)
+      shaftGrad.addColorStop(1, '#4A2E8C');    // shadow (bottom side)
+      ctx.fillStyle = shaftGrad;
+      ctx.beginPath();
+      ctx.rect(r, -pegR, shaftEnd - r, pegR * 2);
+      ctx.fill();
+      // Inner rounded cap (blends with rim edge)
+      ctx.beginPath();
+      ctx.arc(r, 0, pegR, Math.PI / 2, -Math.PI / 2, true);
+      ctx.fillStyle = shaftGrad;
+      ctx.fill();
+
+      // Thin dark outline for definition
+      ctx.shadowBlur = 0;
+      ctx.shadowOffsetY = 0;
+      ctx.strokeStyle = 'rgba(20,10,40,0.45)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.rect(r, -pegR, shaftEnd - r, pegR * 2);
+      ctx.stroke();
+
+      // --- Gold tip bead (matches the hub's gold ring/star) ---
+      const tipGrad = ctx.createRadialGradient(
+        shaftEnd - tipR * 0.3, -tipR * 0.3, tipR * 0.1,
+        shaftEnd, 0, tipR
+      );
+      tipGrad.addColorStop(0, '#FFE27A');
+      tipGrad.addColorStop(0.6, '#FFD700');
+      tipGrad.addColorStop(1, '#F57F17');
+      ctx.fillStyle = tipGrad;
+      ctx.beginPath();
+      ctx.arc(shaftEnd, 0, tipR, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(80,40,0,0.4)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      ctx.restore();
+    }
+
     ctx.restore(); // end rotating group
 
     // ===== Violet bezel rim (stationary, 3D bevel) =====
