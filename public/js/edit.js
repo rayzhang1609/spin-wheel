@@ -12,29 +12,39 @@ const addItemBtn = document.getElementById('addItemBtn');
 const saveSettingsBtn = document.getElementById('saveSettingsBtn');
 const itemCount = document.getElementById('itemCount');
 const activeName = document.getElementById('activeName');
+const bulkAddBtn = document.getElementById('bulkAddBtn');
+const bulkTextarea = document.getElementById('bulkTextarea');
+const fileImport = document.getElementById('fileImport');
+const clearAllBtn = document.getElementById('clearAllBtn');
+const generatePreviewBtn = document.getElementById('generatePreviewBtn');
+const downloadPreviewBtn = document.getElementById('downloadPreviewBtn');
+const previewOutput = document.getElementById('previewOutput');
+const previewCount = document.getElementById('previewCount');
 
 const DEFAULTS = {
   spin: {
     items: [
-      { label: 'Yay!', color: '#FF69B4', emoji: '🎊' },
-      { label: 'Yes!', color: '#38B6FF', emoji: '✨' }
+      { label: 'Yay!', color: '#FF69B4', emoji: '🎊', probability: 50 },
+      { label: 'Yes!', color: '#38B6FF', emoji: '✨', probability: 50 }
     ],
     spinDuration: 5000, minSpins: 5, maxSpins: 10
   },
   knockout: {
     items: [
-      { label: 'Alex', color: '#FF6B6B', emoji: '🦊' },
-      { label: 'Sam', color: '#38B6FF', emoji: '🐼' },
-      { label: 'Jordan', color: '#FFD93D', emoji: '🐰' },
-      { label: 'Taylor', color: '#6BCB77', emoji: '🐸' },
-      { label: 'Casey', color: '#FF8E72', emoji: '🐯' },
-      { label: 'Riley', color: '#C084FC', emoji: '🦉' },
-      { label: 'Morgan', color: '#4D96FF', emoji: '🐵' },
-      { label: 'Jamie', color: '#FF6B9D', emoji: '🐶' }
+      { label: 'Alex', color: '#FF6B6B', emoji: '🦊', probability: 12.5 },
+      { label: 'Sam', color: '#38B6FF', emoji: '🐼', probability: 12.5 },
+      { label: 'Jordan', color: '#FFD93D', emoji: '🐰', probability: 12.5 },
+      { label: 'Taylor', color: '#6BCB77', emoji: '🐸', probability: 12.5 },
+      { label: 'Casey', color: '#FF8E72', emoji: '🐯', probability: 12.5 },
+      { label: 'Riley', color: '#C084FC', emoji: '🦉', probability: 12.5 },
+      { label: 'Morgan', color: '#4D96FF', emoji: '🐵', probability: 12.5 },
+      { label: 'Jamie', color: '#FF6B9D', emoji: '🐶', probability: 12.5 }
     ],
     spinDuration: 5000, minSpins: 5, maxSpins: 10
   }
 };
+
+const RAINBOW = ['#FF9800', '#FF5252', '#E91E8C', '#7B4FE0', '#5C6BC0', '#42A5F5', '#66BB6A', '#C0CA33'];
 
 function escapeHtml(s) {
   return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
@@ -42,11 +52,30 @@ function escapeHtml(s) {
   });
 }
 
+function ensureProbabilities(items) {
+  const n = items.length;
+  if (!n) return;
+  const equal = 100 / n;
+  let total = 0;
+  items.forEach(item => {
+    if (typeof item.probability !== 'number' || isNaN(item.probability)) {
+      item.probability = equal;
+    }
+    total += item.probability;
+  });
+  if (Math.abs(total - 100) > 0.5) {
+    items.forEach(item => { item.probability = equal; });
+  }
+}
+
 function setActive(key) {
   activeKey = key;
   tabBtns.forEach(btn => btn.classList.toggle('active', btn.dataset.key === key));
   activeName.textContent = key === 'spin' ? 'Spin Wheel' : 'Knockout Wheel';
-  if (wheel && data[key]) wheel.setItems(data[key].items);
+  if (wheel && data[key]) {
+    ensureProbabilities(data[key].items);
+    wheel.setItems(data[key].items);
+  }
   renderEditorItems();
   loadSettings();
 }
@@ -70,12 +99,13 @@ async function loadKey(key) {
 
 async function init() {
   await Promise.all([loadKey('spin'), loadKey('knockout')]);
+  ensureProbabilities(data.spin.items);
+  ensureProbabilities(data.knockout.items);
   wheel = new SpinWheel('wheelCanvas', { items: data[activeKey].items, onSpinEnd: () => {} });
   setActive('spin');
   startPolling();
 }
 
-// Poll for live edits made from another tab/device.
 function startPolling() {
   if (pollTimer) clearInterval(pollTimer);
   pollTimer = setInterval(async () => {
@@ -85,10 +115,6 @@ function startPolling() {
         if (!cfg) continue;
         const json = JSON.stringify(cfg);
         if (json !== lastSavedJson[key]) {
-          // Only clobber the local copy if we're not actively editing that tab,
-          // to avoid wiping in-progress changes. We update the non-active tab
-          // freely; for the active tab we update items only if the editor
-          // inputs aren't focused.
           data[key] = cfg;
           lastSavedJson[key] = json;
           if (key === activeKey) {
@@ -117,6 +143,7 @@ function loadSettings() {
 function renderEditorItems() {
   const d = data[activeKey];
   if (!d) return;
+  ensureProbabilities(d.items);
   editorItems.innerHTML = '';
   itemCount.textContent = `${d.items.length} item${d.items.length === 1 ? '' : 's'}`;
 
@@ -129,6 +156,8 @@ function renderEditorItems() {
       <input type="color" value="${item.color}" data-idx="${i}" class="item-color" title="Color">
       <input type="text" value="${escapeHtml(item.label)}" data-idx="${i}" class="item-label" placeholder="Label">
       <input type="text" value="${escapeHtml(item.emoji || '')}" data-idx="${i}" class="item-emoji" placeholder="Icon" maxlength="4">
+      <input type="number" value="${(item.probability || 0).toFixed(1)}" data-idx="${i}" class="item-prob" min="0" max="100" step="0.1" title="Win probability %">
+      <span class="prob-unit">%</span>
       <label class="prioritized-toggle" title="When a peg stops beside this wedge, it rebounds onto this wedge.">
         <input type="checkbox" data-idx="${i}" class="item-prioritized" ${item.prioritized ? 'checked' : ''}>
         <span>Prioritized</span>
@@ -152,6 +181,27 @@ async function saveActive() {
   }
 }
 
+// Probability auto-adjust: when one changes, scale the rest to fill the remainder.
+function adjustProbabilities(changedIdx, newVal) {
+  const items = data[activeKey].items;
+  const n = items.length;
+  if (n <= 1) return;
+  newVal = Math.max(0, Math.min(100, parseFloat(newVal) || 0));
+  items[changedIdx].probability = newVal;
+  const remainder = 100 - newVal;
+  const others = items.filter((_, i) => i !== changedIdx);
+  const otherTotal = others.reduce((s, it) => s + (it.probability || 0), 0);
+  if (otherTotal > 0 && remainder > 0) {
+    others.forEach(it => {
+      it.probability = (it.probability / otherTotal) * remainder;
+    });
+  } else if (remainder > 0) {
+    others.forEach(it => { it.probability = remainder / others.length; });
+  } else {
+    others.forEach(it => { it.probability = 0; });
+  }
+}
+
 editorItems.addEventListener('input', (e) => {
   const t = e.target;
   if (t.classList.contains('item-color')) {
@@ -160,6 +210,14 @@ editorItems.addEventListener('input', (e) => {
     const dot = t.closest('.editor-item').querySelector('.color-dot');
     if (dot) dot.style.background = t.value;
     if (wheel) wheel.setItems(data[activeKey].items);
+  } else if (t.classList.contains('item-prob')) {
+    const idx = parseInt(t.dataset.idx);
+    adjustProbabilities(idx, t.value);
+    // Update all prob inputs in the DOM without full re-render
+    data[activeKey].items.forEach((item, i) => {
+      const inp = editorItems.querySelector(`.item-prob[data-idx="${i}"]`);
+      if (inp && i !== idx) inp.value = item.probability.toFixed(1);
+    });
   }
 });
 
@@ -179,6 +237,10 @@ editorItems.addEventListener('change', async (e) => {
   } else if (t.classList.contains('item-prioritized')) {
     data[activeKey].items[idx].prioritized = t.checked;
     await saveActive();
+  } else if (t.classList.contains('item-prob')) {
+    adjustProbabilities(idx, t.value);
+    await saveActive();
+    renderEditorItems();
   }
 });
 
@@ -189,8 +251,10 @@ editorItems.addEventListener('click', async (e) => {
   if (btn.classList.contains('del-btn')) {
     if (data[activeKey].items.length <= 2) return alert('Need at least 2 items.');
     data[activeKey].items.splice(idx, 1);
+    ensureProbabilities(data[activeKey].items);
     await saveActive();
     renderEditorItems();
+    if (wheel) wheel.setItems(data[activeKey].items);
   } else if (btn.classList.contains('move-btn')) {
     const dir = btn.dataset.dir;
     const arr = data[activeKey].items;
@@ -209,11 +273,130 @@ addItemBtn.addEventListener('click', async () => {
   const color = document.getElementById('newColor').value;
   const emoji = document.getElementById('newEmoji').value.trim();
   if (!label) return;
-  data[activeKey].items.push({ label, color, emoji, prioritized: false });
+  data[activeKey].items.push({ label, color, emoji, prioritized: false, probability: 0 });
+  ensureProbabilities(data[activeKey].items);
   await saveActive();
   renderEditorItems();
+  if (wheel) wheel.setItems(data[activeKey].items);
   document.getElementById('newLabel').value = '';
   document.getElementById('newEmoji').value = '';
+});
+
+// ===== Bulk add from textarea =====
+bulkAddBtn.addEventListener('click', async () => {
+  const text = bulkTextarea.value.trim();
+  if (!text) return;
+  const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+  if (!lines.length) return;
+  const items = data[activeKey].items;
+  lines.forEach((line, i) => {
+    items.push({
+      label: line,
+      color: RAINBOW[items.length % RAINBOW.length],
+      emoji: '',
+      prioritized: false,
+      probability: 0
+    });
+  });
+  ensureProbabilities(items);
+  await saveActive();
+  renderEditorItems();
+  if (wheel) wheel.setItems(items);
+  bulkTextarea.value = '';
+});
+
+// ===== File import =====
+fileImport.addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  try {
+    const text = await file.text();
+    const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+    if (!lines.length) { alert('No lines found in file.'); return; }
+    const items = data[activeKey].items;
+    lines.forEach(line => {
+      items.push({
+        label: line,
+        color: RAINBOW[items.length % RAINBOW.length],
+        emoji: '',
+        prioritized: false,
+        probability: 0
+      });
+    });
+    ensureProbabilities(items);
+    await saveActive();
+    renderEditorItems();
+    if (wheel) wheel.setItems(items);
+  } catch (err) {
+    alert('File read failed: ' + err.message);
+  }
+  fileImport.value = '';
+});
+
+// ===== Clear all =====
+clearAllBtn.addEventListener('click', async () => {
+  if (!confirm('Delete ALL choices for ' + (activeKey === 'spin' ? 'Spin Wheel' : 'Knockout Wheel') + '? This cannot be undone.')) return;
+  data[activeKey].items = [
+    { label: 'Choice 1', color: '#FF69B4', emoji: '', prioritized: false, probability: 50 },
+    { label: 'Choice 2', color: '#38B6FF', emoji: '', prioritized: false, probability: 50 }
+  ];
+  await saveActive();
+  renderEditorItems();
+  if (wheel) wheel.setItems(data[activeKey].items);
+});
+
+// ===== Spin outcome preview generator =====
+let lastPreviewText = '';
+
+generatePreviewBtn.addEventListener('click', () => {
+  const items = data[activeKey].items;
+  if (!items || items.length < 2) { alert('Need at least 2 items.'); return; }
+  ensureProbabilities(items);
+  const count = Math.max(1, Math.min(1000, parseInt(previewCount.value) || 10));
+  const weights = items.map(it => Math.max(0, it.probability || 0));
+  const totalW = weights.reduce((a, b) => a + b, 0);
+  if (totalW <= 0) { alert('Probabilities must sum to > 0.'); return; }
+
+  const results = [];
+  const tally = {};
+  for (let s = 0; s < count; s++) {
+    let r = Math.random() * totalW;
+    let picked = 0;
+    for (let i = 0; i < items.length; i++) {
+      r -= weights[i];
+      if (r <= 0) { picked = i; break; }
+    }
+    const label = items[picked].label;
+    results.push((s + 1) + '. ' + label);
+    tally[label] = (tally[label] || 0) + 1;
+  }
+
+  let out = '=== Spin Outcome Preview ===\n';
+  out += 'Wedge: ' + activeKey + ' | Spins: ' + count + '\n\n';
+  out += results.join('\n') + '\n\n';
+  out += '=== Summary ===\n';
+  Object.keys(tally).sort((a, b) => tally[b] - tally[a]).forEach(label => {
+    const c = tally[label];
+    const pct = (c / count * 100).toFixed(1);
+    out += label + ': ' + c + ' (' + pct + '%)\n';
+  });
+
+  previewOutput.value = out;
+  lastPreviewText = out;
+  downloadPreviewBtn.disabled = false;
+});
+
+downloadPreviewBtn.addEventListener('click', () => {
+  if (!lastPreviewText) return;
+  const blob = new Blob([lastPreviewText], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'spin-preview-' + activeKey + '-' + Date.now() + '.txt';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 });
 
 saveSettingsBtn.addEventListener('click', async () => {

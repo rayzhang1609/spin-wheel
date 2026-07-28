@@ -370,6 +370,100 @@
 
 .num-input { max-width: 130px; }
 
+/* ===== Probability input ===== */
+.item-prob {
+  width: 60px;
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  padding: 7px 6px;
+  color: #e2e8f0;
+  font-family: inherit;
+  font-size: 0.8rem;
+  text-align: right;
+  flex-shrink: 0;
+}
+.item-prob:focus { outline: none; border-color: #a855f7; }
+.prob-unit {
+  color: #64748b;
+  font-size: 0.72rem;
+  flex-shrink: 0;
+}
+
+/* ===== Textarea ===== */
+.editor-textarea {
+  width: 100%;
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  padding: 10px 12px;
+  color: #e2e8f0;
+  font-family: inherit;
+  font-size: 0.85rem;
+  resize: vertical;
+  margin-bottom: 10px;
+  transition: border-color 0.15s;
+}
+.editor-textarea:focus { outline: none; border-color: #3b82f6; }
+.editor-textarea[readonly] { background: #0a1020; color: #94a3b8; }
+
+/* ===== Bulk actions ===== */
+.bulk-actions {
+  display: flex;
+  gap: 10px;
+}
+.file-upload-label {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+/* ===== Preview generator ===== */
+.preview-gen-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.preview-gen-row label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.preview-gen-row label span {
+  font-size: 0.7rem;
+  color: #64748b;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ===== Danger zone ===== */
+.danger-block { border-color: #3f1d1d !important; }
+.btn-danger {
+  background: transparent;
+  color: #ef4444;
+  border: 1px solid #ef4444;
+  padding: 9px 16px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.825rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.btn-danger:hover { background: rgba(239, 68, 68, 0.12); }
+
+/* ===== Hint text ===== */
+.hint {
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  color: #64748b;
+  font-size: 0.7rem;
+}
+
 @media (max-width: 860px) {
   .edit-layout { grid-template-columns: 1fr; }
   .edit-preview { position: static; }
@@ -381,4 +475,6 @@
   .editor-color, .editor-input.small { align-self: stretch; }
   .editor-item { flex-wrap: wrap; }
   .prioritized-toggle { margin-left: 30px; }
+  .bulk-actions { flex-direction: column; }
+  .preview-gen-row { flex-direction: column; align-items: stretch; }
 }

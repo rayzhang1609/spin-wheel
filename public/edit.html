@@ -53,6 +53,18 @@
         </div>
 
         <div class="panel-block">
+          <h2 class="section-label">Bulk Add <span class="hint">(one choice per line)</span></h2>
+          <textarea id="bulkTextarea" class="editor-textarea" rows="5" placeholder="Choice A&#10;Choice B&#10;Choice C"></textarea>
+          <div class="bulk-actions">
+            <button class="btn btn-secondary" id="bulkAddBtn" type="button">Add Lines</button>
+            <label class="btn btn-secondary file-upload-label">
+              Import File
+              <input type="file" id="fileImport" accept=".txt,.csv,.doc,.docx" hidden>
+            </label>
+          </div>
+        </div>
+
+        <div class="panel-block">
           <h2 class="section-label">Spin Settings</h2>
           <div class="settings-row">
             <label>
@@ -69,6 +81,24 @@
             </label>
           </div>
           <button class="btn btn-secondary" id="saveSettingsBtn" type="button">Save Settings</button>
+        </div>
+
+        <div class="panel-block">
+          <h2 class="section-label">Spin Outcome Preview</h2>
+          <div class="preview-gen-row">
+            <label>
+              <span>Number of spins</span>
+              <input type="number" id="previewCount" value="10" min="1" max="1000" class="editor-input num-input">
+            </label>
+            <button class="btn btn-primary" id="generatePreviewBtn" type="button">Generate</button>
+            <button class="btn btn-secondary" id="downloadPreviewBtn" type="button" disabled>Download</button>
+          </div>
+          <textarea id="previewOutput" class="editor-textarea" rows="8" readonly placeholder="Generated results will appear here..."></textarea>
+        </div>
+
+        <div class="panel-block danger-block">
+          <h2 class="section-label">Danger Zone</h2>
+          <button class="btn btn-danger" id="clearAllBtn" type="button">Clear All Choices</button>
         </div>
       </section>
     </div>
