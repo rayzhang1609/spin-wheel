@@ -20,18 +20,20 @@
   --arcade-icon-border: rgba(180, 200, 255, 0.5);
 }
 
-/* ===== Body: violet gradient base ===== */
+/* ===== Body: solid black letterbox; gradient lives inside container ===== */
 body {
-  background: radial-gradient(ellipse at 50% 38%, #3d1f6e 0%, #2a1545 35%, #1a0a2e 70%, #0d0518 100%) !important;
+  background: #000 !important;
   font-family: 'Nunito', 'Comic Neue', sans-serif;
 }
 
-/* ===== Bokeh light orbs layer ===== */
+/* ===== Bokeh light orbs layer — constrained to container width ===== */
 .bokeh-layer {
   position: fixed;
   top: 0;
-  left: 0;
-  width: 100vw;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 480px;
   height: 100dvh;
   pointer-events: none;
   /* Above the dark vignette, but behind the game content (also z-index: 1). */
