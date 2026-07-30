@@ -62,8 +62,8 @@
     const color = BOKEH_COLORS[Math.floor(Math.random() * BOKEH_COLORS.length)];
     orb.style.background = 'radial-gradient(circle, ' + color + ' 0%, transparent 65%)';
     if (!reducedMotion) {
-      orb.style.animationDelay = (Math.random() * 4) + 's';
-      orb.style.animationDuration = rand(2.5, 4) + 's';
+      orb.style.animationDelay = (Math.random() * 12) + 's';
+      orb.style.animationDuration = rand(2.5, 5.5) + 's';
     } else {
       orb.style.animation = 'none';
       orb.style.opacity = '0.5';
