@@ -46,6 +46,16 @@ const DEFAULTS = {
 
 const RAINBOW = ['#FF9800', '#FF5252', '#E91E8C', '#7B4FE0', '#5C6BC0', '#42A5F5', '#66BB6A', '#C0CA33'];
 
+// Detect whether the current items are still the untouched default pair
+// (same labels as DEFAULTS, exactly 2 items). If so, bulk/file import
+// should replace them rather than append alongside.
+function isUntouchedDefaults(key, items) {
+  const def = DEFAULTS[key];
+  if (!def || !def.items) return false;
+  if (items.length !== 2) return false;
+  return items[0].label === def.items[0].label && items[1].label === def.items[1].label;
+}
+
 function escapeHtml(s) {
   return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
     return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
@@ -289,6 +299,7 @@ bulkAddBtn.addEventListener('click', async () => {
   const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
   if (!lines.length) return;
   const items = data[activeKey].items;
+  if (isUntouchedDefaults(activeKey, items)) items.length = 0;
   lines.forEach((line, i) => {
     items.push({
       label: line,
@@ -315,6 +326,7 @@ function addLinesAsItems(lines) {
   const cleaned = lines.map(l => l.trim()).filter(Boolean);
   if (!cleaned.length) return 0;
   const items = data[activeKey].items;
+  if (isUntouchedDefaults(activeKey, items)) items.length = 0;
   cleaned.forEach(line => {
     items.push({
       label: line,

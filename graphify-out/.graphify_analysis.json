@@ -1,0 +1,283 @@
+{
+  "communities": {
+    "0": [
+      "public_js_knockout",
+      "public_js_knockout_addcoins",
+      "public_js_knockout_addgems",
+      "public_js_knockout_allitems",
+      "public_js_knockout_bumpcounter",
+      "public_js_knockout_coincountel",
+      "public_js_knockout_confetticanvas",
+      "public_js_knockout_createshootingstars",
+      "public_js_knockout_createstars",
+      "public_js_knockout_default_knockout_config",
+      "public_js_knockout_eliminated",
+      "public_js_knockout_eliminatedlist",
+      "public_js_knockout_fetchknockoutconfig",
+      "public_js_knockout_gemcountel",
+      "public_js_knockout_getactiveitems",
+      "public_js_knockout_idlemessages",
+      "public_js_knockout_launchconfetti",
+      "public_js_knockout_loadwheel",
+      "public_js_knockout_onspinend",
+      "public_js_knockout_pointer",
+      "public_js_knockout_remainingcount",
+      "public_js_knockout_resetbtn",
+      "public_js_knockout_resetgame",
+      "public_js_knockout_restartbtn",
+      "public_js_knockout_resultbanner",
+      "public_js_knockout_resultclose",
+      "public_js_knockout_resultemoji",
+      "public_js_knockout_resulttext",
+      "public_js_knockout_rotatemascots",
+      "public_js_knockout_showfinalwinner",
+      "public_js_knockout_spinbtn",
+      "public_js_knockout_spinmessages",
+      "public_js_knockout_startpolling",
+      "public_js_knockout_updateeliminatedlist",
+      "public_js_knockout_updatewheel",
+      "public_js_knockout_wheelglow",
+      "public_js_knockout_winnerbanner",
+      "public_js_knockout_winnertext",
+      "public_js_knockout_wonemoji",
+      "public_js_knockout_wonitem",
+      "public_js_knockout_wonpopup"
+    ],
+    "1": [
+      "public_js_edit",
+      "public_js_edit_activename",
+      "public_js_edit_additembtn",
+      "public_js_edit_addlinesasitems",
+      "public_js_edit_adjustprobabilities",
+      "public_js_edit_bulkaddbtn",
+      "public_js_edit_bulktextarea",
+      "public_js_edit_clearallbtn",
+      "public_js_edit_config_table",
+      "public_js_edit_data",
+      "public_js_edit_defaults",
+      "public_js_edit_downloadpreviewbtn",
+      "public_js_edit_editoritems",
+      "public_js_edit_ensureprobabilities",
+      "public_js_edit_escapehtml",
+      "public_js_edit_fileimport",
+      "public_js_edit_generatepreviewbtn",
+      "public_js_edit_getext",
+      "public_js_edit_init",
+      "public_js_edit_itemcount",
+      "public_js_edit_lastsavedjson",
+      "public_js_edit_loadkey",
+      "public_js_edit_loadsettings",
+      "public_js_edit_parsedocx",
+      "public_js_edit_parseplaintext",
+      "public_js_edit_parsespreadsheet",
+      "public_js_edit_previewcount",
+      "public_js_edit_previewoutput",
+      "public_js_edit_rainbow",
+      "public_js_edit_rendereditoritems",
+      "public_js_edit_saveactive",
+      "public_js_edit_savesettingsbtn",
+      "public_js_edit_setactive",
+      "public_js_edit_startpolling",
+      "public_js_edit_tabbtns"
+    ],
+    "2": [
+      "public_js_spin",
+      "public_js_spin_addcoins",
+      "public_js_spin_addgems",
+      "public_js_spin_bumpcounter",
+      "public_js_spin_coincountel",
+      "public_js_spin_confetticanvas",
+      "public_js_spin_createshootingstars",
+      "public_js_spin_createstars",
+      "public_js_spin_default_spin_config",
+      "public_js_spin_fetchspinconfig",
+      "public_js_spin_gemcountel",
+      "public_js_spin_idlemessages",
+      "public_js_spin_launchconfetti",
+      "public_js_spin_loadwheel",
+      "public_js_spin_onspinend",
+      "public_js_spin_pointer",
+      "public_js_spin_resetbtn",
+      "public_js_spin_resultbanner",
+      "public_js_spin_resultclose",
+      "public_js_spin_resultemoji",
+      "public_js_spin_resulttext",
+      "public_js_spin_rotatemascots",
+      "public_js_spin_spinbtn",
+      "public_js_spin_spinmessages",
+      "public_js_spin_startpolling",
+      "public_js_spin_wheelglow"
+    ],
+    "3": [
+      "public_js_wheel",
+      "public_js_wheel_spinwheel",
+      "public_js_wheel_spinwheel_constructor",
+      "public_js_wheel_spinwheel_deflectpointer",
+      "public_js_wheel_spinwheel_draw",
+      "public_js_wheel_spinwheel_drawhub",
+      "public_js_wheel_spinwheel_ensureaudio",
+      "public_js_wheel_spinwheel_finalizespin",
+      "public_js_wheel_spinwheel_getcontrastcolor",
+      "public_js_wheel_spinwheel_getwinner",
+      "public_js_wheel_spinwheel_getwinnerindex",
+      "public_js_wheel_spinwheel_handlepegcontact",
+      "public_js_wheel_spinwheel_lighten",
+      "public_js_wheel_spinwheel_playclick",
+      "public_js_wheel_spinwheel_playlanding",
+      "public_js_wheel_spinwheel_resetpointer",
+      "public_js_wheel_spinwheel_runsettleembellishment",
+      "public_js_wheel_spinwheel_runsoftsettle",
+      "public_js_wheel_spinwheel_setitems",
+      "public_js_wheel_spinwheel_spin",
+      "public_js_wheel_spinwheel_startidleloop",
+      "public_js_wheel_spinwheel_torgba",
+      "public_js_wheel_spinwheel_tweenrotation"
+    ],
+    "4": [
+      "backend_package",
+      "backend_package_dependencies",
+      "backend_package_dependencies_cors",
+      "backend_package_dependencies_express",
+      "backend_package_description",
+      "backend_package_main",
+      "backend_package_name",
+      "backend_package_scripts",
+      "backend_package_scripts_start",
+      "backend_package_version",
+      "cors",
+      "express"
+    ],
+    "5": [
+      "package",
+      "package_description",
+      "package_name",
+      "package_private",
+      "package_scripts",
+      "package_scripts_dev",
+      "package_scripts_start",
+      "package_version"
+    ],
+    "6": [
+      "public_js_background",
+      "public_js_background_creategridlights",
+      "public_js_background_createmarqueebulbs",
+      "public_js_background_createsidelights",
+      "public_js_background_init",
+      "public_js_background_makebokeh",
+      "public_js_background_makesparkle",
+      "public_js_background_rand"
+    ],
+    "7": [
+      "backend_server",
+      "backend_server_app",
+      "backend_server_cors",
+      "backend_server_express",
+      "backend_server_fs",
+      "backend_server_path",
+      "backend_server_public_dir"
+    ],
+    "8": [
+      "public_js_supabaseclient",
+      "public_js_supabaseclient_getsupabase",
+      "public_js_supabaseclient_insertresult",
+      "public_js_supabaseclient_loadconfigrow",
+      "public_js_supabaseclient_saveconfigrow"
+    ],
+    "9": [
+      "vercel",
+      "vercel_cleanurls",
+      "vercel_rewrites"
+    ],
+    "10": [
+      "api_config"
+    ]
+  },
+  "cohesion": {
+    "0": 0.07073170731707316,
+    "1": 0.07563025210084033,
+    "2": 0.10461538461538461,
+    "3": 0.18972332015810275,
+    "4": 0.16666666666666666,
+    "5": 0.25,
+    "6": 0.5714285714285714,
+    "7": 0.2857142857142857,
+    "8": 0.7,
+    "9": 0.6666666666666666,
+    "10": 1.0
+  },
+  "gods": [
+    {
+      "id": "public_js_wheel_spinwheel",
+      "label": "SpinWheel",
+      "degree": 22
+    },
+    {
+      "id": "public_js_knockout_onspinend",
+      "label": "onSpinEnd()",
+      "degree": 7
+    },
+    {
+      "id": "public_js_knockout_updatewheel",
+      "label": "updateWheel()",
+      "degree": 6
+    },
+    {
+      "id": "public_js_background_rand",
+      "label": "rand()",
+      "degree": 5
+    },
+    {
+      "id": "public_js_edit_setactive",
+      "label": "setActive()",
+      "degree": 5
+    },
+    {
+      "id": "public_js_edit_init",
+      "label": "init()",
+      "degree": 5
+    },
+    {
+      "id": "public_js_edit_rendereditoritems",
+      "label": "renderEditorItems()",
+      "degree": 5
+    },
+    {
+      "id": "public_js_knockout_loadwheel",
+      "label": "loadWheel()",
+      "degree": 5
+    },
+    {
+      "id": "public_js_spin_onspinend",
+      "label": "onSpinEnd()",
+      "degree": 5
+    },
+    {
+      "id": "public_js_background_creategridlights",
+      "label": "createGridLights()",
+      "degree": 4
+    }
+  ],
+  "surprises": [],
+  "questions": [
+    {
+      "type": "isolated_nodes",
+      "question": "What connects `name`, `version`, `description` to the rest of the system?",
+      "why": "78 weakly-connected nodes found - possible documentation gaps or missing edges."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `knockout.js` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.07073170731707316 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `edit.js` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.07563025210084033 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `spin.js` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.10461538461538461 - nodes in this community are weakly interconnected."
+    }
+  ]
+}
