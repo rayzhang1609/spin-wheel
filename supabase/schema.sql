@@ -50,8 +50,8 @@ alter table public.knockout_spin_results enable row level security;
 -- ---------- Seed default configs so the wheels work on first load ----------
 insert into public.spin_config (id, data) values (1, '{
   "items": [
-    {"label": "Yay!", "color": "#FF69B4", "emoji": "🎊"},
-    {"label": "Yes!", "color": "#38B6FF", "emoji": "✨"}
+    {"label": "Yay!", "color": "#FF69B4", "emoji": "🎊", "isDefault": true},
+    {"label": "Yes!", "color": "#38B6FF", "emoji": "✨", "isDefault": true}
   ],
   "spinDuration": 5000,
   "minSpins": 5,
@@ -61,14 +61,14 @@ on conflict (id) do nothing;
 
 insert into public.knockout_config (id, data) values (1, '{
   "items": [
-    {"label": "Alex", "color": "#FF6B6B", "emoji": "🦊"},
-    {"label": "Sam", "color": "#38B6FF", "emoji": "🐼"},
-    {"label": "Jordan", "color": "#FFD93D", "emoji": "🐰"},
-    {"label": "Taylor", "color": "#6BCB77", "emoji": "🐸"},
-    {"label": "Casey", "color": "#FF8E72", "emoji": "🐯"},
-    {"label": "Riley", "color": "#C084FC", "emoji": "🦉"},
-    {"label": "Morgan", "color": "#4D96FF", "emoji": "🐵"},
-    {"label": "Jamie", "color": "#FF6B9D", "emoji": "🐶"}
+    {"label": "Alex", "color": "#FF6B6B", "emoji": "🦊", "isDefault": true},
+    {"label": "Sam", "color": "#38B6FF", "emoji": "🐼", "isDefault": true},
+    {"label": "Jordan", "color": "#FFD93D", "emoji": "🐰", "isDefault": true},
+    {"label": "Taylor", "color": "#6BCB77", "emoji": "🐸", "isDefault": true},
+    {"label": "Casey", "color": "#FF8E72", "emoji": "🐯", "isDefault": true},
+    {"label": "Riley", "color": "#C084FC", "emoji": "🦉", "isDefault": true},
+    {"label": "Morgan", "color": "#4D96FF", "emoji": "🐵", "isDefault": true},
+    {"label": "Jamie", "color": "#FF6B9D", "emoji": "🐶", "isDefault": true}
   ],
   "spinDuration": 5000,
   "minSpins": 5,

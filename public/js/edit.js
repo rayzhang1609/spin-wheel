@@ -24,21 +24,21 @@ const previewCount = document.getElementById('previewCount');
 const DEFAULTS = {
   spin: {
     items: [
-      { label: 'Yay!', color: '#FF69B4', emoji: '🎊', probability: 50 },
-      { label: 'Yes!', color: '#38B6FF', emoji: '✨', probability: 50 }
+      { label: 'Yay!', color: '#FF69B4', emoji: '🎊', probability: 50, isDefault: true },
+      { label: 'Yes!', color: '#38B6FF', emoji: '✨', probability: 50, isDefault: true }
     ],
     spinDuration: 5000, minSpins: 5, maxSpins: 10
   },
   knockout: {
     items: [
-      { label: 'Alex', color: '#FF6B6B', emoji: '🦊', probability: 12.5 },
-      { label: 'Sam', color: '#38B6FF', emoji: '🐼', probability: 12.5 },
-      { label: 'Jordan', color: '#FFD93D', emoji: '🐰', probability: 12.5 },
-      { label: 'Taylor', color: '#6BCB77', emoji: '🐸', probability: 12.5 },
-      { label: 'Casey', color: '#FF8E72', emoji: '🐯', probability: 12.5 },
-      { label: 'Riley', color: '#C084FC', emoji: '🦉', probability: 12.5 },
-      { label: 'Morgan', color: '#4D96FF', emoji: '🐵', probability: 12.5 },
-      { label: 'Jamie', color: '#FF6B9D', emoji: '🐶', probability: 12.5 }
+      { label: 'Alex', color: '#FF6B6B', emoji: '🦊', probability: 12.5, isDefault: true },
+      { label: 'Sam', color: '#38B6FF', emoji: '🐼', probability: 12.5, isDefault: true },
+      { label: 'Jordan', color: '#FFD93D', emoji: '🐰', probability: 12.5, isDefault: true },
+      { label: 'Taylor', color: '#6BCB77', emoji: '🐸', probability: 12.5, isDefault: true },
+      { label: 'Casey', color: '#FF8E72', emoji: '🐯', probability: 12.5, isDefault: true },
+      { label: 'Riley', color: '#C084FC', emoji: '🦉', probability: 12.5, isDefault: true },
+      { label: 'Morgan', color: '#4D96FF', emoji: '🐵', probability: 12.5, isDefault: true },
+      { label: 'Jamie', color: '#FF6B9D', emoji: '🐶', probability: 12.5, isDefault: true }
     ],
     spinDuration: 5000, minSpins: 5, maxSpins: 10
   }
@@ -46,14 +46,12 @@ const DEFAULTS = {
 
 const RAINBOW = ['#FF9800', '#FF5252', '#E91E8C', '#7B4FE0', '#5C6BC0', '#42A5F5', '#66BB6A', '#C0CA33'];
 
-// Detect whether the current items are still the untouched default pair
-// (same labels as DEFAULTS, exactly 2 items). If so, bulk/file import
-// should replace them rather than append alongside.
-function isUntouchedDefaults(key, items) {
-  const def = DEFAULTS[key];
-  if (!def || !def.items) return false;
-  if (items.length !== 2) return false;
-  return items[0].label === def.items[0].label && items[1].label === def.items[1].label;
+// Remove all items flagged as defaults. Called before paste/import adds
+// new items so defaults don't linger alongside real imported choices.
+function removeDefaultItems(items) {
+  for (let i = items.length - 1; i >= 0; i--) {
+    if (items[i].isDefault === true) items.splice(i, 1);
+  }
 }
 
 function escapeHtml(s) {
@@ -96,6 +94,17 @@ async function loadKey(key) {
   try {
     const cfg = await loadConfigRow(CONFIG_TABLE[key]);
     if (cfg && Array.isArray(cfg.items) && cfg.items.length >= 2) {
+      // Backfill isDefault on legacy data: if items match the original
+      // default labels exactly and don't already have isDefault set,
+      // flag them so paste/import can replace them.
+      const def = DEFAULTS[key];
+      if (def && def.items) {
+        const matchDefaults = cfg.items.length === def.items.length &&
+          cfg.items.every((it, i) => it.label === def.items[i].label && !it.isDefault);
+        if (matchDefaults) {
+          cfg.items.forEach(it => { it.isDefault = true; });
+        }
+      }
       data[key] = cfg;
       lastSavedJson[key] = JSON.stringify(cfg);
       return;
@@ -235,6 +244,8 @@ editorItems.addEventListener('change', async (e) => {
   const t = e.target;
   const idx = parseInt(t.dataset.idx);
   if (Number.isNaN(idx)) return;
+  // Any manual edit to a default item promotes it to a real item.
+  if (data[activeKey].items[idx].isDefault) delete data[activeKey].items[idx].isDefault;
   if (t.classList.contains('item-label')) {
     data[activeKey].items[idx].label = t.value;
     await saveActive();
@@ -299,7 +310,7 @@ bulkAddBtn.addEventListener('click', async () => {
   const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
   if (!lines.length) return;
   const items = data[activeKey].items;
-  if (isUntouchedDefaults(activeKey, items)) items.length = 0;
+  removeDefaultItems(items);
   lines.forEach((line, i) => {
     items.push({
       label: line,
@@ -326,7 +337,7 @@ function addLinesAsItems(lines) {
   const cleaned = lines.map(l => l.trim()).filter(Boolean);
   if (!cleaned.length) return 0;
   const items = data[activeKey].items;
-  if (isUntouchedDefaults(activeKey, items)) items.length = 0;
+  removeDefaultItems(items);
   cleaned.forEach(line => {
     items.push({
       label: line,
@@ -409,8 +420,8 @@ fileImport.addEventListener('change', async (e) => {
 clearAllBtn.addEventListener('click', async () => {
   if (!confirm('Delete ALL choices for ' + (activeKey === 'spin' ? 'Spin Wheel' : 'Knockout Wheel') + '? This cannot be undone.')) return;
   data[activeKey].items = [
-    { label: 'Choice 1', color: '#FF69B4', emoji: '', prioritized: false, probability: 50 },
-    { label: 'Choice 2', color: '#38B6FF', emoji: '', prioritized: false, probability: 50 }
+    { label: 'Choice 1', color: '#FF69B4', emoji: '', prioritized: false, probability: 50, isDefault: true },
+    { label: 'Choice 2', color: '#38B6FF', emoji: '', prioritized: false, probability: 50, isDefault: true }
   ];
   await saveActive();
   renderEditorItems();
