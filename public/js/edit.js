@@ -305,30 +305,90 @@ bulkAddBtn.addEventListener('click', async () => {
   bulkTextarea.value = '';
 });
 
-// ===== File import =====
+// ===== File import — parses .xlsx/.xls, .docx, .txt/.csv =====
+function getExt(name) {
+  const m = /\.([^.]+)$/.exec(name);
+  return m ? m[1].toLowerCase() : '';
+}
+
+function addLinesAsItems(lines) {
+  const cleaned = lines.map(l => l.trim()).filter(Boolean);
+  if (!cleaned.length) return 0;
+  const items = data[activeKey].items;
+  cleaned.forEach(line => {
+    items.push({
+      label: line,
+      color: RAINBOW[items.length % RAINBOW.length],
+      emoji: '',
+      prioritized: false,
+      probability: 0
+    });
+  });
+  return cleaned.length;
+}
+
+async function parseSpreadsheet(file) {
+  const buf = await file.arrayBuffer();
+  const wb = window.XLSX.read(buf, { type: 'array' });
+  const lines = [];
+  wb.SheetNames.forEach(sheetName => {
+    const ws = wb.Sheets[sheetName];
+    const rows = window.XLSX.utils.sheet_to_json(ws, { header: 1, blankrows: false });
+    rows.forEach(row => {
+      if (Array.isArray(row)) {
+        // Use first non-empty cell as the item label
+        const val = row.find(c => c != null && String(c).trim());
+        if (val != null) lines.push(String(val).trim());
+      }
+    });
+  });
+  return lines;
+}
+
+async function parseDocx(file) {
+  const buf = await file.arrayBuffer();
+  const result = await window.mammoth.extractRawText({ arrayBuffer: buf });
+  return result.value.split(/\r?\n/);
+}
+
+async function parsePlainText(file) {
+  const text = await file.text();
+  return text.split(/\r?\n/);
+}
+
 fileImport.addEventListener('change', async (e) => {
   const file = e.target.files[0];
   if (!file) return;
   try {
-    const text = await file.text();
-    const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
-    if (!lines.length) { alert('No lines found in file.'); return; }
-    const items = data[activeKey].items;
-    lines.forEach(line => {
-      items.push({
-        label: line,
-        color: RAINBOW[items.length % RAINBOW.length],
-        emoji: '',
-        prioritized: false,
-        probability: 0
-      });
-    });
-    ensureProbabilities(items);
+    const ext = getExt(file.name);
+    let lines;
+
+    if (ext === 'xlsx' || ext === 'xls') {
+      lines = await parseSpreadsheet(file);
+    } else if (ext === 'docx') {
+      lines = await parseDocx(file);
+    } else if (ext === 'doc') {
+      // Legacy .doc (not zip-based) — attempt plain text, warn if binary
+      const text = await file.text();
+      if (text.includes('\0') || text.startsWith('PK')) {
+        alert('Legacy .doc files are not supported. Please convert to .docx or .txt.');
+        fileImport.value = '';
+        return;
+      }
+      lines = text.split(/\r?\n/);
+    } else {
+      // .txt, .csv, or anything else — plain text line split
+      lines = await parsePlainText(file);
+    }
+
+    const added = addLinesAsItems(lines);
+    if (!added) { alert('No valid lines found in file.'); fileImport.value = ''; return; }
+    ensureProbabilities(data[activeKey].items);
     await saveActive();
     renderEditorItems();
-    if (wheel) wheel.setItems(items);
+    if (wheel) wheel.setItems(data[activeKey].items);
   } catch (err) {
-    alert('File read failed: ' + err.message);
+    alert('File import failed: ' + err.message);
   }
   fileImport.value = '';
 });

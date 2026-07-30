@@ -82,10 +82,15 @@ body {
   100% { opacity: 0.65; transform: scale(0.85); }
 }
 
-/* ===== Vignette (keep from prior, restyle for violet) ===== */
+/* ===== Vignette — constrained to container width ===== */
 .vignette {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 480px;
+  height: 100dvh;
   background: radial-gradient(ellipse at 50% 40%, transparent 40%, rgba(10, 5, 24, 0.4) 75%, rgba(10, 5, 24, 0.7) 100%);
   pointer-events: none;
   z-index: 0;
